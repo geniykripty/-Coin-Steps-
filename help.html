@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Coin Steps Bot — Справка</title>
+<link rel="icon" type="image/png" href="img/icon.png">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --bg: #0a0b0a;
+    --bg-panel: #101211;
+    --bg-card: #151a17;
+    --border: #1d2320;
+    --border-light: #2a332e;
+    --text: #d7ded9;
+    --text-dim: #9aa5a0;
+    --text-muted: #5f6a64;
+    --text-label: #79857e;
+    --accent: #35e0a1;
+    --accent-dim: rgba(53, 224, 161, 0.08);
+    --accent-glow: rgba(53, 224, 161, 0.3);
+    --warn: #e8a33d;
+    --warn-bg: rgba(232, 163, 61, 0.1);
+    --danger: #ff8a95;
+    --danger-bg: rgba(255, 138, 149, 0.1);
+    --info: #6b7570;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-monospace, "Cascadia Mono", "Consolas", "JetBrains Mono", monospace;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #101211 0%, #0a0b0a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .crumbs { font-size: 12px; letter-spacing: 0.18em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 14px; line-height: 16px; }
+  .hero h1 { font-size: 26px; color: var(--accent); margin-bottom: 16px; font-weight: 700; letter-spacing: 0; }
+  .hero h1 span { color: var(--text); font-weight: 400; }
+  .hero h1.brand { display: flex; align-items: center; gap: 16px; line-height: 1; min-height: 64px; }   /* высота как у шапки остальных страниц: логотип на одном месте */
+  .hero h1.brand .brand-logo { width: 52px; height: 52px; display: block; flex-shrink: 0; }
+  .hero h1.brand .brand-text { display: block; position: relative; top: .08em; color: var(--accent); font-weight: 700; }
+  .hero-sub { font-size: 16px; color: var(--text-dim); max-width: 700px; line-height: 1.7; }
+  .hero-meta { display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
+  .meta-tag { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 8px; padding: 8px 14px; font-size: 12px; color: var(--text-dim); }
+  .meta-tag b { color: var(--accent); margin-right: 6px; }
+
+  /* NAV */
+  .nav { background: var(--bg-panel); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+  .nav-inner { display: flex; gap: 4px; overflow-x: auto; padding: 12px 0; scrollbar-width: none; -ms-overflow-style: none; }
+  .nav-inner::-webkit-scrollbar { display: none; height: 0; }
+  .nav a { color: var(--text-dim); text-decoration: none; padding: 8px 10px; border-radius: 8px; font-size: 12px; white-space: nowrap; transition: all 0.15s; border: 1px solid transparent; }
+  .nav a:hover { color: var(--accent); background: var(--accent-dim); border-color: var(--border-light); }
+
+  /* SECTIONS */
+  .section { padding: 50px 0; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+  .section-title { font-size: 28px; color: var(--accent); margin-bottom: 8px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+  .section-title .icon { font-size: 24px; }
+  .section-sub { color: var(--text-muted); font-size: 13px; margin-bottom: 32px; letter-spacing: 0.05em; }
+
+  /* CARDS */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.2s; }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(53, 224, 161, 0.1); }
+  .card-icon { font-size: 32px; margin-bottom: 12px; }
+  .card h3 { color: var(--text); font-size: 16px; margin-bottom: 8px; }
+  .card p { color: var(--text-dim); font-size: 13px; line-height: 1.6; }
+
+  /* PANEL */
+  .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+  .panel-title { font-size: 14px; letter-spacing: 0.12em; color: var(--text); text-transform: uppercase; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .panel-title b { font-weight: 700; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; }
+  th { font-size: 11px; letter-spacing: 0.12em; color: var(--text-label); text-transform: uppercase; text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); font-weight: 600; }
+  td { padding: 12px; border-bottom: 1px solid #161b18; color: var(--text-dim); }
+  tr:hover td { background: var(--accent-dim); }
+  td:first-child { color: var(--text); font-weight: 600; }
+
+  /* CODE */
+  .code-block { 
+    background: #0c0f0d; 
+    border: 1px solid var(--border); 
+    border-radius: 8px; 
+    padding: 16px 20px; 
+    font-family: ui-monospace, "Cascadia Mono", monospace; 
+    font-size: 13px; 
+    color: var(--accent); 
+    overflow-x: auto; 
+    margin: 12px 0; 
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .code-block .comment { color: var(--text-muted); }
+  .code-block .key { color: var(--warn); }
+  .code-block .string { color: var(--accent); }
+  .inline-code { background: var(--bg-card); border: 1px solid var(--border-light); padding: 2px 8px; border-radius: 4px; font-size: 12px; color: var(--accent); font-family: ui-monospace, monospace; }
+
+  /* ALERTS */
+  .alert { border-radius: 10px; padding: 16px 20px; margin: 16px 0; border-left: 3px solid; display: flex; gap: 14px; align-items: flex-start; }
+  .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .alert-content { flex: 1; }
+  .alert-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .alert-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  .alert.success { background: var(--accent-dim); border-color: var(--accent); }
+  .alert.success .alert-title { color: var(--accent); }
+  .alert.warning { background: var(--warn-bg); border-color: var(--warn); }
+  .alert.warning .alert-title { color: var(--warn); }
+  .alert.danger { background: var(--danger-bg); border-color: var(--danger); }
+  .alert.danger .alert-title { color: var(--danger); }
+  .alert.info { background: rgba(107, 117, 112, 0.1); border-color: var(--info); }
+  .alert.info .alert-title { color: var(--text-dim); }
+
+  /* LISTS */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 10px 0 10px 32px; position: relative; color: var(--text-dim); border-bottom: 1px solid var(--border); }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before { content: '✓'; position: absolute; left: 0; top: 10px; color: var(--accent); font-weight: 700; font-size: 16px; }
+  .checklist.danger li::before { content: '✗'; color: var(--danger); }
+  .checklist.warn li::before { content: '⚠'; color: var(--warn); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .hero h1 { font-size: 22px; } .hero h1.brand .brand-logo { width: 44px; height: 44px; } .section-title { font-size: 22px; } }
+
+  /* FLOW */
+  .flow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 20px; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; margin: 16px 0; }
+  .flow-step { background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--text); flex: 1; min-width: 140px; }
+  .flow-step b { color: var(--accent); display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .flow-arrow { color: var(--accent); font-size: 20px; flex-shrink: 0; }
+
+  /* STRATEGY */
+  .strategy { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden; }
+  .strategy::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); }
+  .strategy.warn::before { background: var(--warn); }
+  .strategy.danger::before { background: var(--danger); }
+  .strategy-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+  .strategy-title { font-size: 18px; color: var(--text); font-weight: 700; }
+  .strategy-badge { background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .strategy.warn .strategy-badge { background: var(--warn-bg); border-color: var(--warn); color: var(--warn); }
+  .strategy.danger .strategy-badge { background: var(--danger-bg); border-color: var(--danger); color: var(--danger); }
+  .strategy-params { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .param { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 8px; padding: 12px; }
+  .param-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .param-value { font-size: 16px; color: var(--accent); font-weight: 700; }
+  .strategy-desc { color: var(--text-dim); font-size: 13px; line-height: 1.6; }
+
+  /* API KEY SECTION */
+  .api-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin: 20px 0; }
+  .api-step { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; padding: 20px; position: relative; }
+  .api-step-num { position: absolute; top: -12px; left: 20px; background: var(--accent); color: #0a0b0a; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+  .api-step h4 { color: var(--text); margin: 10px 0 8px; font-size: 15px; }
+  .api-step p { color: var(--text-dim); font-size: 13px; line-height: 1.6; }
+
+  .perm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 16px 0; }
+  .perm-item { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-dim); }
+  .perm-item .check { color: var(--accent); font-weight: 700; font-size: 16px; }
+  .perm-item .cross { color: var(--danger); font-weight: 700; font-size: 16px; }
+
+  /* FOOTER */
+  .footer { padding: 40px 0; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer-text { font-size: 12px; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 8px; }
+  .footer-warn { color: var(--warn); }
+
+  /* TOC */
+  .toc { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 32px; }
+  .toc-title { font-size: 14px; letter-spacing: 0.12em; color: var(--text-label); text-transform: uppercase; margin-bottom: 16px; }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+  .toc-item { color: var(--text-dim); text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; transition: all 0.15s; display: flex; align-items: center; gap: 8px; }
+  .toc-item:hover { background: var(--accent-dim); color: var(--accent); }
+  .toc-num { color: var(--accent); font-weight: 700; font-size: 12px; }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box { background: linear-gradient(135deg, var(--accent-dim) 0%, rgba(53, 224, 161, 0.02) 100%); border: 1px solid var(--accent); border-radius: 12px; padding: 24px; margin: 20px 0; }
+  .highlight-box .big-num { font-size: 48px; color: var(--accent); font-weight: 700; line-height: 1; }
+  .highlight-box .label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 8px; }
+  /* ── Кнопка «Наверх»: появляется при прокрутке вниз, по кольцу показывает, сколько страницы прокручено ── */
+  .to-top { position:fixed; right:24px; bottom:24px; width:54px; height:54px; padding:0; border:0; border-radius:50%; cursor:pointer; z-index:9000;
+    display:flex; align-items:center; justify-content:center; color:#35e0a1; -webkit-tap-highlight-color:transparent;
+    background:radial-gradient(circle at 30% 24%, #1c2e26 0%, #121815 55%, #0d100e 100%);
+    box-shadow:0 10px 26px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.07), 0 0 18px rgba(53,224,161,.16);
+    opacity:0; visibility:hidden; pointer-events:none; transform:translateY(18px) scale(.82);
+    transition:opacity .25s ease, transform .3s cubic-bezier(.2,.9,.3,1.25), box-shadow .2s ease, visibility 0s linear .3s; }
+  .to-top.show { opacity:1; visibility:visible; pointer-events:auto; transform:none; transition-delay:0s; }
+  .to-top:hover { transform:translateY(-3px); box-shadow:0 14px 30px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.1), 0 0 28px rgba(53,224,161,.42); }
+  .to-top:active { transform:translateY(0) scale(.93); }
+  .to-top:focus-visible { outline:2px solid #35e0a1; outline-offset:3px; }
+  .to-top .tt-ring { position:absolute; left:0; top:0; width:100%; height:100%; transform:rotate(-90deg); }
+  .to-top .tt-ring circle { fill:none; stroke-width:2.6; }
+  .to-top .tt-bg { stroke:#25322c; }
+  .to-top .tt-fg { stroke:#35e0a1; stroke-linecap:round; transition:stroke-dashoffset .12s linear; filter:drop-shadow(0 0 3px rgba(53,224,161,.75)); }
+  .to-top .tt-arrow { position:relative; width:22px; height:22px; transition:transform .22s cubic-bezier(.2,.9,.3,1.3); }
+  .to-top:hover .tt-arrow { transform:translateY(-3px); }
+  @media (max-width:640px) { .to-top { right:16px; bottom:16px; bottom:max(16px, env(safe-area-inset-bottom)); width:48px; height:48px; } }
+  @media (prefers-reduced-motion:reduce) { .to-top, .to-top .tt-arrow, .to-top .tt-fg { transition:none; } }
+  html { overflow-y: scroll; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container hero-content">
+    <div class="crumbs">СПРАВКА / v1.0.02</div>
+    <h1 class="brand"><img src="img/logo.png" alt="Coin Steps" class="brand-logo"><span class="brand-text">COIN STEPS <span>Bot</span></span></h1>
+    <p class="hero-sub">
+      Бот, который сам торгует по «сетке» на бирже <b style="color:#35e0a1">MEXC</b> (спот).<br>
+      Он покупает монету дешевле, когда цена просела, и продаёт чуть дороже, когда она отскочила.<br>
+      Работает с любыми парами из файла <b>tokens.txt</b> (по умолчанию BTC/USDT и ETH/USDT). Управляется из обычного браузера.
+    </p>
+    <div class="hero-meta">
+      <div class="meta-tag"><b>Версия</b> 1.0.02</div>
+      <div class="meta-tag"><b>Биржа</b> MEXC Spot</div>
+      <div class="meta-tag"><b>Пары</b> из tokens.txt</div>
+      <div class="meta-tag"><b>Управление</b> в браузере</div>
+      <div class="meta-tag"><b>Лицензия</b> © Geniy Kripty</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#about">О боте</a>
+      <a href="#start">Быстрый старт</a>
+      <a href="#tokens">Монеты</a>
+      <a href="#screen">Экран</a>
+      <a href="#first">Первая сетка</a>
+      <a href="#how">Как работает</a>
+      <a href="#control">Кнопки</a>
+      <a href="#sounds">Звуки</a>
+      <a href="#safety">Безопасность</a>
+      <a href="#trouble">Проблемы</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc" style="margin-top: 32px;">
+    <div class="toc-title">📑 Содержание</div>
+    <div class="toc-grid">
+      <a href="#about" class="toc-item"><span class="toc-num">01</span> Что это за бот</a>
+      <a href="#words" class="toc-item"><span class="toc-num">02</span> Словарик новичка</a>
+      <a href="#python" class="toc-item"><span class="toc-num">03</span> Установка Python</a>
+      <a href="#api" class="toc-item"><span class="toc-num">04</span> API-ключи MEXC</a>
+      <a href="#start" class="toc-item"><span class="toc-num">05</span> Запуск бота</a>
+      <a href="#tokens" class="toc-item"><span class="toc-num">06</span> Список монет (tokens.txt)</a>
+      <a href="#screen" class="toc-item"><span class="toc-num">07</span> Знакомство с экраном</a>
+      <a href="#first" class="toc-item"><span class="toc-num">08</span> Первая сетка шаг за шагом</a>
+      <a href="#how" class="toc-item"><span class="toc-num">09</span> Как бот работает</a>
+      <a href="#control" class="toc-item"><span class="toc-num">10</span> Кнопки и настройки</a>
+      <a href="#sounds" class="toc-item"><span class="toc-num">11</span> Звуки и сообщения</a>
+      <a href="#tools" class="toc-item"><span class="toc-num">12</span> Графики, бэктест, Excel</a>
+      <a href="#stats" class="toc-item"><span class="toc-num">13</span> Статистика</a>
+      <a href="#safety" class="toc-item"><span class="toc-num">14</span> Безопасность и сбои</a>
+      <a href="#strategies" class="toc-item"><span class="toc-num">15</span> Готовые настройки</a>
+      <a href="#trouble" class="toc-item"><span class="toc-num">16</span> Частые вопросы и проблемы</a>
+      <a href="#tech" class="toc-item"><span class="toc-num">17</span> Для продвинутых</a>
+      <a href="#checklists" class="toc-item"><span class="toc-num">18</span> Чек-листы</a>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <h2 class="section-title"><span class="icon">🕸️</span> Что это за бот</h2>
+    <p class="section-sub">Коротко и без сложных слов</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🕸️</div>
+        <h3>Сетка из покупок</h3>
+        <p>Ты задаёшь стартовую цену, шаг и сумму. Бот выставляет на бирже «лесенку» заявок на покупку: каждая следующая — ниже предыдущей. За один раз — <b style="color:var(--accent)">до 60 уровней</b>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">💰</div>
+        <h3>Продажа с прибылью</h3>
+        <p>Как только покупка исполнилась, бот сам ставит продажу чуть дороже — на столько процентов, сколько ты указал в поле «Тейк-профит».</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔄</div>
+        <h3>Повтор по кругу</h3>
+        <p>После продажи бот снова ставит покупку на том же уровне. Пока цена ходит вверх-вниз, каждый уровень зарабатывает снова и снова.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Понятная статистика</h3>
+        <p>Сколько куплено и продано, сколько заработано, какая прибыль «на бумаге» по ещё не проданным монетам, средняя цена покупки, история всех ордеров.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔔</div>
+        <h3>Звуки и сообщения</h3>
+        <p>Покупка, продажа, выставление ордера, отмена и ошибки сопровождаются своим звуком и всплывающим сообщением — можно не смотреть в экран.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">💾</div>
+        <h3>Помнит, что делал</h3>
+        <p>Бот записывает свои ордера в файл <span class="inline-code">Data/autosell.json</span>. Ордера лежат на бирже, поэтому после выключения света или перезапуска бот продолжает с того же места.</p>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <div class="alert-icon">💡</div>
+      <div class="alert-content">
+        <div class="alert-title">Как бот зарабатывает — простыми словами</div>
+        <div class="alert-text">
+          Цена монеты почти никогда не идёт в одну сторону: она качается вверх и вниз. Бот ставит заявки на покупку на нескольких ценах ниже текущей.
+          Когда цена опускается и «задевает» заявку — монета покупается. Когда цена немного поднимается — бот продаёт её дороже, чем купил, и забирает разницу.
+          Чем больше таких качаний, тем больше прибыли. Лучше всего это работает на «боковом» рынке, когда цена гуляет в коридоре.
+        </div>
+      </div>
+    </div>
+
+    <div class="alert warning">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-content">
+        <div class="alert-title">Главный риск</div>
+        <div class="alert-text">
+          Если цена долго падает и не возвращается, ты накопишь монеты по всё более низким ценам и будешь ждать отскока.
+          Убыток фиксируется только когда ты сам продашь монеты ниже цены покупки, но деньги при этом «заморожены» в монете.
+          Прибыль не гарантирована — вкладывай только те средства, которыми готов рискнуть.
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Чего бот не делает</b></div>
+      <ul class="checklist danger">
+        <li>Не выводит деньги с биржи и не может этого сделать (у ключа не должно быть права на вывод).</li>
+        <li>Не торгует фьючерсами и не использует кредитное плечо — только обычный спот.</li>
+        <li>Не трогает ордера, которые он не выставлял сам.</li>
+        <li>Не предсказывает цену и не обещает прибыль.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- WORDS -->
+  <section class="section" id="words">
+    <h2 class="section-title"><span class="icon">📖</span> Словарик новичка</h2>
+    <p class="section-sub">Слова, которые встретятся в боте и в этой справке</p>
+
+    <div class="panel">
+      <table>
+        <thead><tr><th>Слово</th><th>Что это значит</th></tr></thead>
+        <tbody>
+          <tr><td>Спот</td><td>Обычная покупка и продажа монет за реальные деньги на бирже — без займов и плеча.</td></tr>
+          <tr><td>USDT</td><td>Монета, привязанная к доллару. В ней задаются суммы ордеров и считается прибыль.</td></tr>
+          <tr><td>Лимитный ордер</td><td>Заявка «купи (или продай) по такой-то цене». Она лежит на бирже и ждёт, пока цена до неё дойдёт.</td></tr>
+          <tr><td>Сетка</td><td>Набор заявок на покупку на разных ценах — одна под другой, как ступеньки вниз.</td></tr>
+          <tr><td>Уровень</td><td>Одна «ступенька» сетки, то есть одна заявка.</td></tr>
+          <tr><td>Шаг, %</td><td>На сколько процентов каждый следующий уровень ниже предыдущего.</td></tr>
+          <tr><td>Диапазон, %</td><td>«Ширина» сетки. Количество уровней = Диапазон ÷ Шаг.</td></tr>
+          <tr><td>Просадка</td><td>На сколько процентов цена уровня ниже стартовой цены.</td></tr>
+          <tr><td>Тейк-профит (TP)</td><td>На сколько процентов выше цены покупки бот ставит продажу.</td></tr>
+          <tr><td>Автопродажа</td><td>Режим, в котором бот сам ставит продажу после каждой покупки.</td></tr>
+          <tr><td>Ребай</td><td>Повторная покупка на том же уровне после того, как исполнилась продажа.</td></tr>
+          <tr><td>Цикл</td><td>Один круг: покупка → продажа (→ новая покупка).</td></tr>
+          <tr><td>Активная позиция</td><td>Монеты, которые бот купил и ещё не продал.</td></tr>
+          <tr><td>Реализованная прибыль</td><td>Прибыль, которая уже зафиксирована продажей.</td></tr>
+          <tr><td>Нереализованная прибыль</td><td>Прибыль «на бумаге» по ещё не проданным монетам: она меняется вместе с ценой.</td></tr>
+          <tr><td>API-ключ</td><td>Специальный пароль для программы. Он даёт боту ограниченный доступ к твоему аккаунту биржи — торговать можно, выводить деньги нельзя.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PYTHON -->
+  <section class="section" id="python">
+    <h2 class="section-title"><span class="icon">🐍</span> Установка Python</h2>
+    <p class="section-sub">Пошаговая инструкция для новичков — займёт 5–10 минут</p>
+
+    <div class="alert info">
+      <div class="alert-icon">ℹ️</div>
+      <div class="alert-content">
+        <div class="alert-title">Зачем нужен Python?</div>
+        <div class="alert-text">
+          Бот — это программа на языке Python. Чтобы она запустилась на твоём компьютере, нужно один раз установить Python версии 3.10 или новее.
+          Если Python уже стоит (проверка — в шаге 3), этот раздел можно пропустить.
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Шаг 1 — Скачай Python</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Открой официальный сайт и скачай последнюю стабильную версию (подойдёт Python 3.11 или 3.12). Версии «beta» и «release candidate» не бери.</p>
+      <div class="code-block"><span class="string">https://www.python.org/downloads/</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Шаг 2 — Запусти установщик</b></div>
+      <ul class="checklist">
+        <li><b>ВАЖНО:</b> в самом низу первого окна поставь галочку <span style="color: var(--accent);">"Add Python to PATH"</span></li>
+        <li>Нажми <span style="color: var(--accent);">"Install Now"</span></li>
+        <li>Дождись окончания установки (2–3 минуты)</li>
+        <li>Нажми "Close"</li>
+      </ul>
+      <div class="alert warning" style="margin-top: 12px;">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <div class="alert-title">Без галочки PATH бот не запустится</div>
+          <div class="alert-text">Эта галочка позволяет Windows найти Python из любой папки. Если забыл её поставить — удали Python и установи заново.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Шаг 3 — Проверь установку</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Нажми <span class="inline-code">Win + R</span>, введи <span class="inline-code">cmd</span>, нажми Enter. В чёрном окне выполни:</p>
+      <div class="code-block"><span class="key">python</span> --version
+<span class="comment">REM если "python" не найден, попробуй так:</span>
+<span class="key">py</span> --version</div>
+      <p style="color: var(--text-dim);">Должно появиться что-то вроде <span class="inline-code">Python 3.12.4</span>.</p>
+      <div class="alert danger" style="margin-top: 12px;">
+        <div class="alert-icon">🔴</div>
+        <div class="alert-content">
+          <div class="alert-title">Если Python не найден</div>
+          <div class="alert-text">
+            1. Перезагрузи компьютер.<br>
+            2. Попробуй команду <span class="inline-code">py --version</span> вместо <span class="inline-code">python --version</span>.<br>
+            3. Если не помогло — переустанови Python и не забудь про галочку PATH.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Шаг 4 — Проверь pip</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">pip — это установщик библиотек, он ставится вместе с Python:</p>
+      <div class="code-block"><span class="key">pip</span> --version</div>
+      <p style="color: var(--text-dim);">Если видишь версию — всё готово. Если нет, выполни: <span class="inline-code">python -m ensurepip --upgrade</span></p>
+    </div>
+
+    <div class="alert success">
+      <div class="alert-icon">🎉</div>
+      <div class="alert-content">
+        <div class="alert-title">Готово!</div>
+        <div class="alert-text">Теперь можно переходить к ключам биржи.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- API -->
+  <section class="section" id="api">
+    <h2 class="section-title"><span class="icon">🔑</span> API-ключи MEXC</h2>
+    <p class="section-sub">Как дать боту доступ к бирже — безопасно и без права вывода денег</p>
+
+    <div class="highlight-box">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div><div class="big-num">2</div><div class="label">Ключа нужно получить: API Key и Secret Key</div></div>
+        <div><div class="big-num">90</div><div class="label">Дней — стандартный срок жизни ключа</div></div>
+        <div><div class="big-num">3</div><div class="label">Права нужно включить (вывод — нельзя)</div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Как получить ключ на MEXC</b></div>
+      <div class="api-steps">
+        <div class="api-step">
+          <div class="api-step-num">1</div>
+          <h4>Войди в аккаунт</h4>
+          <p>Открой <b style="color:var(--accent)">mexc.com</b> и авторизуйся. Пройди верификацию (KYC), если ещё не проходил — без неё API не работает.</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">2</div>
+          <h4>Открой раздел API</h4>
+          <p>Профиль → <b style="color:var(--accent)">Open API</b> или сразу <b style="color:var(--accent)">mexc.com/user/openapi</b>.</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">3</div>
+          <h4>Создай ключ</h4>
+          <p>Нажми <b style="color:var(--accent)">"Создать API"</b>, придумай название (например, "CoinStepsBot"), подтверди через 2FA и email.</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">4</div>
+          <h4>Скопируй оба ключа</h4>
+          <p>Сразу сохрани <b>API Key</b> и <b>Secret Key</b>. Secret показывается <b>только один раз</b> — потом его не восстановить, придётся создавать новый ключ.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Какие права включить</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Включай только то, что нужно боту, и ничего лишнего:</p>
+      <div class="perm-grid">
+        <div class="perm-item"><span class="check">✓</span> Spot Reading (чтение)</div>
+        <div class="perm-item"><span class="check">✓</span> Spot Trading (торговля)</div>
+        <div class="perm-item"><span class="check">✓</span> Account Reading (баланс)</div>
+        <div class="perm-item"><span class="cross">✗</span> Withdraw (вывод) — НЕ включать</div>
+        <div class="perm-item"><span class="cross">✗</span> Futures — не нужно</div>
+        <div class="perm-item"><span class="cross">✗</span> Universal Transfer — не нужно</div>
+      </div>
+    </div>
+
+    <div class="alert warning">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-content">
+        <div class="alert-title">Привяжи ключ к своему IP-адресу</div>
+        <div class="alert-text">
+          В настройках ключа есть «белый список IP». Если добавить туда IP своего компьютера, ключ будет работать только с него — даже украденный ключ окажется бесполезным.
+          Побочный эффект приятный: MEXC считает такой ключ бессрочным, и бот покажет «Ключ: Бессрочный (IP)».
+          Если у тебя динамический IP и он часто меняется — можно оставить поле пустым, но это менее безопасно.
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Файл .env — куда вписать ключи</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">В папке с ботом лежит файл <span class="inline-code">.env</span>. Открой его в Блокноте и впиши свои значения:</p>
+      <div class="code-block"><span class="comment"># Ключи с mexc.com → Open API</span>
+<span class="key">MEXC_API_KEY</span>=<span class="string">твой_api_key</span>
+<span class="key">MEXC_SECRET_KEY</span>=<span class="string">твой_secret_key</span>
+
+<span class="comment"># Тип рынка — для этого бота всегда spot</span>
+<span class="key">MARKET_TYPE</span>=<span class="string">spot</span>
+
+<span class="comment"># Запасной вариант учёта срока ключа (см. ниже). Дата и время создания ключа из личного кабинета биржи.</span>
+<span class="key">API_KEY_CREATED</span>=<span class="string">"2026-08-18 17:29:29"</span>
+<span class="key">API_KEY_DAYS</span>=<span class="string">90</span></div>
+      <div class="alert danger" style="margin-top: 12px;">
+        <div class="alert-icon">🔒</div>
+        <div class="alert-content">
+          <div class="alert-title">Файл .env — секретный</div>
+          <div class="alert-text">Никому не показывай его, не отправляй в чаты и не выкладывай в интернет (GitHub и т. п.). Кто знает Secret Key — тот может торговать на твоём аккаунте. Если ключ попал на чужие глаза — сразу удали его в MEXC и создай новый.</div>
+        </div>
+      </div>
+      <p style="color: var(--text-dim); margin-top: 12px;">После любого изменения <span class="inline-code">.env</span> перезапусти бота: файл читается только при старте.</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Как бот следит за сроком ключа</b></div>
+      <p style="color: var(--text-dim);">
+        Бот сам спрашивает у MEXC, сколько ещё проживёт ключ и привязан ли он к IP (раз в 5 минут). Остаток показывается в блоке «Управление ботом MEXC».
+        Строки <span class="inline-code">API_KEY_CREATED</span> и <span class="inline-code">API_KEY_DAYS</span> нужны только как запасной вариант — на случай, если биржа не ответила (например, у ключа нет права «Account Reading»).
+      </p>
+      <table>
+        <thead><tr><th>Цвет</th><th>Остаток</th><th>Что делать</th></tr></thead>
+        <tbody>
+          <tr><td>🟢 Зелёный</td><td>больше 14 дней</td><td>Ничего.</td></tr>
+          <tr><td>🟡 Жёлтый</td><td>от 6 до 14 дней</td><td>Пора готовить новый ключ.</td></tr>
+          <tr><td>🔴 Красный</td><td>5 дней и меньше</td><td>Срочно продли ключ или создай новый.</td></tr>
+        </tbody>
+      </table>
+      <p style="color: var(--text-dim); margin-top: 8px;">Если ключ уже истёк, бот сообщит об этом красным сообщением.</p>
+      <p style="color: var(--text-dim); margin-top: 8px;"><b>Продление:</b> за 5 дней до истечения срока действия вашего API-ключа вы можете продлить его действие на 90 дней в разделе <span class="inline-code">Мой ключ API — Действие — Продлить</span>.</p>
+    </div>
+
+    <div class="alert info">
+      <div class="alert-icon">🔁</div>
+      <div class="alert-content">
+        <div class="alert-title">Как заменить ключ, когда он истёк</div>
+        <div class="alert-text">
+          1. На <b>mexc.com/user/openapi</b> удали старый ключ и создай новый с теми же правами.<br>
+          2. Впиши новые <span class="inline-code">MEXC_API_KEY</span> и <span class="inline-code">MEXC_SECRET_KEY</span> в <span class="inline-code">.env</span>.<br>
+          3. Обнови <span class="inline-code">API_KEY_CREATED</span> — дата и время создания нового ключа.<br>
+          4. Перезапусти бота.<br>
+          Ордера, которые бот уже выставил, останутся на бирже — после перезапуска бот продолжит их отслеживать.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- START -->
+  <section class="section" id="start">
+    <h2 class="section-title"><span class="icon">🚀</span> Запуск бота</h2>
+    <p class="section-sub">Три шага: ключи → запуск → открыть в браузере</p>
+
+    <div class="panel">
+      <div class="panel-title"><b>Шаг 1 — Заполни .env</b></div>
+      <p style="color: var(--text-dim);">Впиши ключи, как описано в разделе «API-ключи MEXC».</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Шаг 2 — Запусти сервер</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;"><b>🪟 Windows (самый простой способ).</b> Создай в папке с ботом текстовый файл, вставь в него код ниже и сохрани как <span class="inline-code">start.bat</span>:</p>
+      <div class="code-block">@echo off
+chcp 65001 &gt;nul
+cd /d "%~dp0"
+title Coin Steps Bot
+
+<span class="comment">REM Ищем Python</span>
+where py &gt;nul 2&gt;nul
+if %errorlevel%==0 (
+  set PYTHON=py
+) else (
+  set PYTHON=python
+)
+
+<span class="comment">REM Создаём виртуальное окружение (отдельную папку для библиотек бота)</span>
+if not exist venv (
+  %PYTHON% -m venv venv
+)
+call venv\Scripts\activate.bat
+
+<span class="comment">REM При первом запуске ставим нужные библиотеки</span>
+python -c "import fastapi, ccxt, uvicorn, dotenv, slowapi" &gt;nul 2&gt;nul
+if errorlevel 1 (
+  echo Первый запуск - устанавливаю библиотеки...
+  python -m pip install --quiet fastapi "uvicorn[standard]" ccxt python-dotenv slowapi
+)
+
+<span class="comment">REM Запускаем сервер</span>
+python -m uvicorn main:app --host 127.0.0.1 --port 8000
+pause</div>
+      <div class="alert success">
+        <div class="alert-icon">✅</div>
+        <div class="alert-content">
+          <div class="alert-title">Что делает этот файл</div>
+          <div class="alert-text">
+            При первом запуске он сам создаст отдельную папку для библиотек и установит всё нужное (это займёт пару минут), потом запустит бота.
+            Окно не закрывается при ошибке — ты успеешь прочитать сообщение. В дальнейшем бот запускается двойным кликом по <span class="inline-code">start.bat</span>.
+          </div>
+        </div>
+      </div>
+      <p style="color: var(--text-dim); margin: 16px 0 12px;"><b>🐧 Linux / Mac.</b> В терминале, в папке с ботом:</p>
+      <div class="code-block"><span class="comment"># Один раз: установить библиотеки</span>
+pip install fastapi "uvicorn[standard]" ccxt python-dotenv slowapi
+
+<span class="comment"># Запустить сервер</span>
+python -m uvicorn main:app --host 127.0.0.1 --port 8000</div>
+      <div class="alert warning" style="margin-top: 12px;">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <div class="alert-title">Не закрывай окно с ботом</div>
+          <div class="alert-text">Чёрное окно — это и есть работающий бот. Закроешь окно — бот остановится (ордера на бирже при этом останутся). Параметр <span class="inline-code">127.0.0.1</span> означает, что бот доступен только с твоего компьютера — так безопаснее всего.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Шаг 3 — Открой интерфейс</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Введи в адресную строку браузера:</p>
+      <div class="code-block"><span class="string">http://localhost:8000</span></div>
+    </div>
+
+    <div class="alert success">
+      <div class="alert-icon">✅</div>
+      <div class="alert-content">
+        <div class="alert-title">Как понять, что всё в порядке</div>
+        <div class="alert-text">В блоке «Управление ботом MEXC» горит зелёный индикатор «Подключено: Спот» и показан срок действия ключа. Если индикатор красный — проверь ключи в <span class="inline-code">.env</span> и раздел «Частые вопросы и проблемы».</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOKENS -->
+  <section class="section" id="tokens">
+    <h2 class="section-title"><span class="icon">🪙</span> Список монет (tokens.txt)</h2>
+    <p class="section-sub">Какими монетами торгует бот — одна строка на монету, перезапуск не нужен</p>
+
+    <div class="alert info">
+      <div class="alert-icon">ℹ️</div>
+      <div class="alert-content">
+        <div class="alert-title">Один файл для всех страниц</div>
+        <div class="alert-text">Из <span class="inline-code">tokens.txt</span> берётся переключатель монет на главной странице, на графике, в статистике и в бэктесте. Добавил монету в файл — кнопка с ней появится везде.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Как написать файл</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Положи файл рядом с <span class="inline-code">main.py</span> (можно и в папку <span class="inline-code">Data/</span>) и впиши монеты:</p>
+      <div class="code-block"><span class="comment"># Монеты, с которыми работает бот</span>
+<span class="key">BTC</span>
+<span class="key">ETH</span>
+<span class="key">SOL</span>, <span class="key">XRP</span>, <span class="key">DOGE</span>      <span class="comment"># можно несколько в одной строке через запятую</span>
+<span class="key">PEPE/USDT</span>          <span class="comment"># пару можно писать целиком</span></div>
+      <table style="margin-top: 14px;">
+        <thead><tr><th>Правило</th><th>Как понимает бот</th></tr></thead>
+        <tbody>
+          <tr><td>Записать монету</td><td>По одной в строке или через запятую. Регистр и пробелы не важны: <b>sol</b> и <b>SOL</b> — одно и то же.</td></tr>
+          <tr><td>Комментарии</td><td>Всё после <span class="inline-code">#</span> бот игнорирует. Пустые строки тоже.</td></tr>
+          <tr><td>Без пары</td><td><b>SOL</b> — это <b>SOL/USDT</b>. Если нужна другая пара, пиши её целиком: <b>ETH/BTC</b>.</td></tr>
+          <tr><td>Ошибки в строке</td><td>Допустимы только латинские буквы и цифры. Неверные записи молча пропускаются, повторы убираются.</td></tr>
+          <tr><td>Файла нет или он пуст</td><td>Сервер сам отдаёт запасной список <span class="inline-code">TRACKED_SYMBOLS</span> из <span class="inline-code">.env</span> (по умолчанию BTC/USDT и ETH/USDT). Страницы получают его как обычный список, поэтому ошибок в чёрном окне нет.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Когда изменения вступают в силу</b></div>
+      <ul class="checklist">
+        <li>Сервер замечает изменение файла сам, а страницы бота проверяют его раз в 30 секунд. Ни перезапуск бота, ни F5 не нужны.</li>
+        <li>Монеты, которых нет на бирже MEXC (спот), на главной странице не показываются: проверь написание тикера.</li>
+        <li>Цены для графика берутся с Binance. Монеты, которых нет на Binance, на странице графика пропускаются; бэктест сетки тоже считается по ценам Binance, поэтому для редкой монеты расчёт может не получиться.</li>
+        <li>Выбранная монета запоминается. Если убрать её из файла, страница сама переключится на первую монету из списка.</li>
+        <li>Бот хранит выставленные ордера в <span class="inline-code">Data/autosell.json</span> и следит за ними независимо от файла. Если убрать монету из списка, ордера по ней не пропадут и продолжат отслеживаться, но управлять ими из интерфейса получится, только когда вернёшь монету в файл.</li>
+      </ul>
+    </div>
+
+    <div class="alert warning">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-content">
+        <div class="alert-title">Не убирай монету, пока по ней есть открытые ордера</div>
+        <div class="alert-text">Бот их не отменит, но ты перестанешь видеть их на экране. Сначала нажми «Отменить все ордера» по этой монете или закрой позиции, а потом убирай её из списка.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN -->
+  <section class="section" id="screen">
+    <h2 class="section-title"><span class="icon">🖥️</span> Знакомство с экраном</h2>
+    <p class="section-sub">Что где находится — сверху вниз</p>
+
+    <div class="alert info">
+      <div class="alert-icon">ℹ️</div>
+      <div class="alert-content">
+        <div class="alert-title">Сначала расчёт, потом биржа</div>
+        <div class="alert-text">Всё, что ты вводишь в «Параметры сетки», только считается на экране. На биржу ничего не уходит, пока ты не нажмёшь «Выставить сетку на биржу» и не подтвердишь действие. Поэтому можно спокойно экспериментировать с числами.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <table>
+        <thead><tr><th>Блок на экране</th><th>Что в нём</th></tr></thead>
+        <tbody>
+          <tr><td>Шапка страницы</td><td>Справа — плашка <b>«Заработано»</b>: реализованная прибыль по <b>всем</b> монетам за всё время работы бота (рядом написано, за сколько дней) и в процентах. Наведи курсор — появится разбивка «По активам». Если итог отрицательный, плашка становится оранжевой.</td></tr>
+          <tr><td>Верхняя панель</td><td>Переключатель актива — все монеты из <b>tokens.txt</b> (с текущей ценой), кнопка «⬇ Бэктест сетки», кнопка «Справка» (эта страница).</td></tr>
+          <tr><td>Быстрые настройки</td><td>Три готовых набора «шаг / диапазон»: Консервативный, Сбалансированный, Агрессивный. Один клик — и поля заполнены.</td></tr>
+          <tr><td>Параметры сетки</td><td>Поля, которые ты задаёшь: <b>Стартовая цена</b> (с кнопкой «⟳ live»), <b>Шаг %</b>, <b>Сумма ордера $</b>, <b>Диапазон %</b>, <b>Тейк-профит %</b>.</td></tr>
+          <tr><td>Статистика сетки</td><td>Расчёт «что получится»: сколько будет ордеров, сколько всего USDT нужно, средняя цена входа, сколько монет купится, какой профит с одного цикла.</td></tr>
+          <tr><td>Уровни лимитных ордеров</td><td>Таблица всех уровней: номер, просадка, цена, сколько монет, сумма в $, цена продажи (TP). Есть выгрузка в Excel.</td></tr>
+          <tr><td>Балансы</td><td>Сколько на аккаунте USDT и выбранной монеты (и её стоимость в USDT), свободно и в ордерах; остальные монеты — списком ниже.</td></tr>
+          <tr><td>Статистика бота</td><td>Итоги по реальным сделкам: покупки, продажи, потрачено, получено, заработано, прибыль «на бумаге», средняя цена покупки.</td></tr>
+          <tr><td>Активные позиции</td><td>Монеты, которые бот купил и ещё не продал. У каждой видна прибыль/убыток и кнопка «Продать».</td></tr>
+          <tr><td>Управление ботом MEXC</td><td>Статус подключения и срок ключа, главные кнопки (выставить сетку, автопродажа, звук, обновить, отменить все), счётчики и таблица открытых ордеров с кнопкой «Отменить».</td></tr>
+          <tr><td>История ордеров</td><td>Ордера бота со статусами: создан, исполнен, отменён. Хранятся последние 5000 записей, более старые удаляются.</td></tr>
+          <tr><td>Журнал</td><td>Лента событий: «Покупка исполнилась…», ошибки, предупреждения. Красные строки — ошибки, зелёные — удачные действия.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert success">
+      <div class="alert-icon">✅</div>
+      <div class="alert-content">
+        <div class="alert-title">Каждая монета работает отдельно</div>
+        <div class="alert-text">Переключатель вверху меняет актив для всех блоков сразу: параметры, ордера, история, статистика. Для каждой монеты бот запоминает свои настройки, а следит за всеми монетами из списка одновременно — даже если на экране сейчас открыта только одна.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIRST GRID -->
+  <section class="section" id="first">
+    <h2 class="section-title"><span class="icon">🧭</span> Первая сетка шаг за шагом</h2>
+    <p class="section-sub">Как выставить свою первую сетку</p>
+
+    <div class="panel">
+      <div class="api-steps">
+        <div class="api-step">
+          <div class="api-step-num">1</div>
+          <h4>Выбери монету</h4>
+          <p>Нажми нужную монету в верхней панели (список берётся из файла <b>tokens.txt</b>: добавил строку — кнопка появилась, перезапуск не нужен).</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">2</div>
+          <h4>Выбери настройки</h4>
+          <p>Нажми один из готовых наборов в «Быстрых настройках» (для начала подойдёт «Сбалансированный») или заполни поля сам.</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">3</div>
+          <h4>Обнови цену</h4>
+          <p>Нажми <b style="color:var(--accent)">⟳ live</b> — в поле «Стартовая цена» подставится текущая цена монеты. Первый уровень будет ниже неё на один шаг.</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">4</div>
+          <h4>Задай сумму и тейк-профит</h4>
+          <p><b>Сумма ордера</b> — сколько USDT тратить на один уровень (минимум около <b>1.05</b>). <b>Тейк-профит</b> — на сколько % выше цены покупки продавать.</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">5</div>
+          <h4>Проверь расчёт</h4>
+          <p>Посмотри «Статистику сетки» и таблицу уровней. Особенно «Всего вложено»: на балансе должно быть столько свободных USDT.</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">6</div>
+          <h4>Выставь сетку</h4>
+          <p>Нажми <b style="color:var(--accent)">«Выставить сетку на биржу»</b>, прочитай окно подтверждения и нажми «Подтвердить». Прозвучит сигнал, а в таблице открытых ордеров появятся ордера.</p>
+        </div>
+      </div>
+      <div class="alert warning" style="margin-top: 20px;">
+        <div class="alert-icon">🧪</div>
+        <div class="alert-content">
+          <div class="alert-title">Для первого раза возьми маленькую сумму</div>
+          <div class="alert-text">Начни с 5–10 USDT всего: например, сумма ордера 1.05 и 5 уровней. Убедись, что всё работает как ожидаешь, и только потом увеличивай.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Пример с цифрами (ETH)</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Стартовая цена <b>2 700</b>, шаг <b>3%</b>, сумма ордера <b>1.05 USDT</b>, тейк-профит <b>5%</b>. Бот получит такие первые уровни:</p>
+      <table>
+        <thead><tr><th>Уровень</th><th>Просадка</th><th>Цена покупки</th><th>Монет</th><th>Сумма</th><th>Цена продажи (TP)</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>−3.00%</td><td>2 619.00</td><td>0.00040</td><td>≈ $1.04</td><td>≈ 2 749.95</td></tr>
+          <tr><td>2</td><td>−5.91%</td><td>2 540.43</td><td>0.00041</td><td>≈ $1.04</td><td>≈ 2 667.45</td></tr>
+          <tr><td>3</td><td>−8.73%</td><td>2 464.22</td><td>0.00042</td><td>≈ $1.03</td><td>≈ 2 587.43</td></tr>
+        </tbody>
+      </table>
+      <ul class="checklist" style="margin-top: 12px;">
+        <li>Шаг считается <b>от предыдущего уровня</b>, а не от стартовой цены. Поэтому просадка копится чуть медленнее, чем «3%, 6%, 9%».</li>
+        <li>Монет покупается столько, сколько помещается в сумму ордера. Бирже нужны круглые значения, поэтому сумма в $ получается чуть меньше 1.05.</li>
+        <li>Каждый цикл на уровне 1 принесёт примерно <b>0.05 USDT</b> (5% от суммы), минус комиссия биржи. Звучит скромно, но уровней много, а циклов может быть много.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Сколько получится уровней</b></div>
+      <div class="code-block">Уровней = Диапазон ÷ Шаг        (не больше 60)
+
+Диапазон 80%, шаг 5%    →  16 уровней
+Диапазон 50%, шаг 10%   →   5 уровней
+Диапазон 120%, шаг 2.5% →  48 уровней</div>
+      <ul class="checklist">
+        <li>Минимальный шаг и минимальный диапазон — <b>0.01%</b>.</li>
+        <li>За один раз бот выставляет <b>не больше 60 уровней</b>. Если Диапазон ÷ Шаг получается больше, сетка обрезается, а под числом «Ордеров» в «Статистике сетки» появляется пометка, до какой просадки она реально дотягивается.</li>
+        <li>«Диапазон» — это не глубина падения цены. Из-за того, что шаг считается от предыдущего уровня, последний уровень получается заметно выше, чем «−Диапазон%». Точную просадку последнего уровня смотри в таблице уровней.</li>
+        <li>Стартовую цену меньше 0.000000001 бот не принимает (так что дешёвые монеты вроде PEPE или SHIB работают): подставится предыдущая нормальная цена или текущая рыночная.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Что проверяет бот перед выставлением</b></div>
+      <ul class="checklist">
+        <li>Показывает окно подтверждения с краткой сводкой сетки — ты видишь, что именно уйдёт на биржу.</li>
+        <li>Предупреждает, если часть уровней стоит <b>выше текущей цены</b> (биржа такие покупки отклонит) или <b>глубже −97%</b> от рынка (скорее всего, опечатка).</li>
+        <li>Не даёт отправить одну и ту же сетку дважды подряд (в течение 90 секунд) — защита от двойного клика.</li>
+        <li>Если какие-то уровни не прошли, показывает их номера и причину; остальные уровни выставляются.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="section" id="how">
+    <h2 class="section-title"><span class="icon">⚙️</span> Как бот работает</h2>
+    <p class="section-sub">Полный цикл, шаг за шагом</p>
+
+    <div class="panel">
+      <div class="panel-title"><b>Цикл одного уровня</b></div>
+      <div class="flow">
+        <div class="flow-step"><b>Шаг 1</b>Цена опускается до уровня сетки</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><b>Шаг 2</b>Биржа исполняет покупку</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><b>Шаг 3</b>Бот ставит продажу по цене TP</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><b>Шаг 4</b>Продажа исполнилась — бот снова ставит покупку на этом уровне</div>
+      </div>
+      <p style="color: var(--text-dim);">
+        Бот проверяет свои ордера <b style="color: var(--accent)">каждые 3 секунды</b> (параметр <span class="inline-code">WATCH_INTERVAL</span>) и работает одновременно для всех монет из списка.
+        Каждый уровень в любой момент держит один открытый ордер: либо ещё не сработавшую покупку, либо (после покупки) продажу.
+      </p>
+      <ul class="checklist" style="margin-top: 16px;">
+        <li><b>Цена продажи.</b> Тейк-профит считается от реальной цены исполнения покупки. Если лимитная цена была 2575.35, а купилось по 2574.94, продажа ставится от 2574.94.</li>
+        <li><b>Цена новой покупки.</b> Возврат на уровень идёт по цене самого уровня сетки.</li>
+        <li><b>Если продажу выставить не удалось.</b> Бот пробует до 5 раз — по одной попытке на каждую проверку (по умолчанию раз в 3 секунды). Если не вышло — монеты остаются в «Активных позициях» с кнопкой «Продать», а в журнале появляется ошибка. Купленные монеты не теряются.</li>
+        <li><b>Если новую покупку выставить не удалось.</b> Продажа уже прошла, поэтому цикл засчитывается в статистику, а в журнале появляется сообщение об ошибке.</li>
+        <li><b>Автопродажа выключена.</b> Бот только покупает, продажу после покупки не ставит (подробнее в разделе «Кнопки и настройки»).</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Что бот делает, если ордер «пропал» с биржи</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Ордер может исчезнуть из списка открытых по разным причинам: он исполнился, ты отменил его вручную, биржа ответила с задержкой. Бот не паникует, а разбирается по шагам:</p>
+      <div class="flow">
+        <div class="flow-step"><b>Шаг 1</b>Не нашёл ордер в списке открытых</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><b>Шаг 2</b>Спрашивает у биржи статус именно этого ордера</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><b>Шаг 3</b>Смотрит, что ответила биржа</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><b>Шаг 4</b>Действует по ответу</div>
+      </div>
+      <table>
+        <thead><tr><th>Ответ биржи</th><th>Что делает бот</th></tr></thead>
+        <tbody>
+          <tr><td>Ордер исполнен</td><td>Фиксирует сделку и выставляет встречный ордер.</td></tr>
+          <tr><td>Ордер отменён, ничего не купилось</td><td>Записывает в историю статус «Отменён» и убирает ордер из наблюдения. Ты ничего не теряешь.</td></tr>
+          <tr><td>Ордер исполнен частично</td><td>Фиксирует купленную часть, выставляет встречный ордер на неё, остаток закрывает. В истории будет запись «Частично». Это работает и когда ты сам отменил такой ордер кнопкой в боте.</td></tr>
+          <tr><td>Биржа говорит «такого ордера нет»</td><td>Не снимает ордер сразу — иногда биржа отвечает так на пару секунд. Ордер снимается с наблюдения только после 3 одинаковых ответов подряд (около 10 секунд), и в журнале появляется предупреждение.</td></tr>
+          <tr><td>Биржа не ответила (сбой сети, таймаут)</td><td>Ничего не меняет и просто повторяет проверку в следующий цикл (через 3 секунды). Один сбой связи не приводит к потере ордера.</td></tr>
+        </tbody>
+      </table>
+      <div class="alert info" style="margin-top: 12px;">
+        <div class="alert-icon">ℹ️</div>
+        <div class="alert-content">
+          <div class="alert-title">Запись «Отменён» в истории — это нормально</div>
+          <div class="alert-text">История показывает всю жизнь ордера: создан → исполнен / отменён / частично. Запись «Отменён» означает, что бот заметил отмену (твою или биржи) и аккуратно закрыл ордер у себя. Ошибки здесь нет.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTROL -->
+  <section class="section" id="control">
+    <h2 class="section-title"><span class="icon">🎛️</span> Кнопки и настройки</h2>
+    <p class="section-sub">Что делает каждая кнопка и каждое поле</p>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-title"><b>Главные кнопки (блок «Управление ботом MEXC»)</b></div>
+        <table>
+          <thead><tr><th>Кнопка</th><th>Что делает</th></tr></thead>
+          <tbody>
+            <tr><td>Выставить сетку на биржу</td><td>Отправляет на биржу все ордера на покупку из таблицы уровней. Перед отправкой просит подтверждение.</td></tr>
+            <tr><td>Автопродажа по TP: Вкл / Выкл</td><td>Включает или выключает автоматическую продажу после покупки. Переключается отдельно для каждой монеты.</td></tr>
+            <tr><td>🔊 Звук / 🔇 Без звука</td><td>Включает и выключает звуковые сигналы. Всплывающие сообщения остаются в любом случае. При каждом переключении звучит короткий сигнал и показывается сообщение.</td></tr>
+            <tr><td>Обновить</td><td>Сразу перезагружает данные, не дожидаясь очередной автоматической проверки.</td></tr>
+            <tr><td>Отменить все ордера</td><td>Отменяет все открытые ордера бота по выбранной монете (после подтверждения). Покупки из сетки и продажи по TP тоже.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><b>Поля «Параметры сетки»</b></div>
+        <table>
+          <thead><tr><th>Поле</th><th>Что означает</th></tr></thead>
+          <tbody>
+            <tr><td>Стартовая цена $</td><td>Точка отсчёта. Первый уровень будет ниже неё на один шаг. Кнопка «⟳ live» подставляет текущую рыночную цену.</td></tr>
+            <tr><td>Шаг %</td><td>На сколько процентов каждый следующий уровень ниже предыдущего. Минимум 0.01.</td></tr>
+            <tr><td>Сумма ордера $</td><td>Сколько USDT потратить на один уровень. Минимум биржи — около 1.05 USDT.</td></tr>
+            <tr><td>Диапазон %</td><td>«Ширина» сетки: Уровней = Диапазон ÷ Шаг (максимум 60). Минимум 0.01.</td></tr>
+            <tr><td>Тейк-профит %</td><td>На сколько процентов выше реальной цены покупки ставится продажа.</td></tr>
+          </tbody>
+        </table>
+        <p style="color: var(--text-dim); font-size: 12px; margin-top: 8px;">Введённые значения запоминаются отдельно для каждой монеты — после перезагрузки страницы они на месте.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Как работает «Отменить все ордера»</b></div>
+      <ul class="checklist">
+        <li><b>Что отменяется.</b> Все открытые ордера бота по выбранной монете: и покупки из сетки, и продажи по тейк-профиту. Ордера, которые ты поставил на бирже вручную, не трогаются. Если открытых ордеров нет, кнопка неактивна.</li>
+        <li><b>Подтверждение.</b> Перед отменой появляется окно со списком всех ордеров (сторона, цена, количество, время). Пока не нажмёшь «Подтвердить», ничего не произойдёт.</li>
+        <li><b>Отмена идёт по одному, с короткой паузой.</b> Между отменами 0,25 секунды (параметр <span class="inline-code">ORDER_MIN_INTERVAL</span>). У MEXC создание и отмена ордеров делят один лимит запросов, и пауза не даёт его превысить. Из-за этого 60 ордеров отменяются примерно 20–25 секунд. Кнопка в это время показывает «⏳ Отмена…», страница не зависает, ответ ждётся до 90 секунд.</li>
+        <li><b>Частично исполненные ордера.</b> После отмены бот проверяет, успела ли биржа исполнить часть ордера. Такой ордер остаётся под наблюдением, чтобы исполненная часть обработалась как обычно (поставилась продажа или повторная покупка). Остальные снимаются с наблюдения и записываются в журнал как отменённые.</li>
+        <li><b>Результат.</b> Приходит сообщение «Успешно отменено N ордеров». Если часть не отменилась, отдельно показывается красное сообщение: число ошибок и причина для первых трёх ордеров. Обычно достаточно нажать кнопку ещё раз: уже отменённые ордера повторно не затрагиваются.</li>
+        <li><b>Лимит.</b> Не больше 10 нажатий в минуту. Если нажать чаще, сервер ответит ошибкой о превышении частоты, подожди минуту.</li>
+        <li><b>Что остаётся на счёте.</b> Отмена покупок освобождает USDT. Отмена продаж не продаёт монеты: они остаются на балансе без тейк-профита, пока ты не выставишь новую сетку или не продашь их вручную.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Кнопки в таблицах</b></div>
+      <table>
+        <thead><tr><th>Где</th><th>Кнопка</th><th>Что делает</th></tr></thead>
+        <tbody>
+          <tr><td>Открытые ордера</td><td>Отменить</td><td>Отменяет один выбранный ордер (после подтверждения).</td></tr>
+          <tr><td>Активные позиции</td><td>Продать</td><td>Ставит продажу монет этой позиции (подробно ниже).</td></tr>
+          <tr><td>Таблицы</td><td>Показать все</td><td>Раскрывает таблицу целиком (по умолчанию показана только часть строк).</td></tr>
+          <tr><td>Таблицы</td><td>⬇ Excel</td><td>Скачивает содержимое блока в виде файла Excel (список в разделе «Графики, бэктест, Excel»).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Кнопка «Продать» в активных позициях</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Появляется у позиции, по которой сейчас нет ордера на продажу: например, автопродажа была выключена, ты отменил продажу или бот не смог её выставить.</p>
+      <ul class="checklist">
+        <li>Ставит новый ордер на продажу этих монет.</li>
+        <li><b>Цена продажи.</b> Если процент в поле «Тейк-профит» такой же, как при покупке, берётся прежняя цена TP этой позиции. Если процент другой — цена пересчитывается: цена покупки × (1 + процент ÷ 100).</li>
+        <li>После продажи этой кнопкой бот <b>не</b> покупает заново на этом уровне: цикл закончен, позиция закрыта.</li>
+        <li>Пока запрос идёт, кнопка занята. Двойной клик ордер не удвоит.</li>
+      </ul>
+    </div>
+
+    <div class="alert warning">
+      <div class="alert-icon">⚙️</div>
+      <div class="alert-content">
+        <div class="alert-title">Что будет, если выключить автопродажу</div>
+        <div class="alert-text">
+          Бот продолжит ставить покупки по сетке, но после исполнения <b>не будет</b> выставлять продажу. Купленные монеты останутся на балансе и появятся в «Активных позициях» с кнопкой «Продать» — закрыть их можно вручную в любой момент.<br><br>
+          <b>Когда это полезно:</b> если хочешь просто накапливать монету; хочешь сам выбирать моменты продажи; рынок сильно растёт, и ты готов держать монеты дольше.
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Клавиши</b></div>
+      <table>
+        <thead><tr><th>Клавиша</th><th>Действие</th></tr></thead>
+        <tbody>
+          <tr><td>Esc</td><td>Закрыть окно подтверждения («Отмена»).</td></tr>
+          <tr><td>F5 или Ctrl + R</td><td>Перезагрузить страницу (данные загрузятся заново).</td></tr>
+          <tr><td>Ctrl + F5</td><td>Полная перезагрузка с очисткой кэша браузера. Нужна, если ты заменил файлы бота и страница выглядит по-старому.</td></tr>
+          <tr><td>↑ / ↓ в поле параметра</td><td>Увеличить или уменьшить значение на один шаг поля (в пределах допустимого).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Клавиши на странице графика</b></div>
+      <table>
+        <thead><tr><th>Клавиша</th><th>Действие</th></tr></thead>
+        <tbody>
+          <tr><td>← / →</td><td>Предыдущая и следующая монета из списка. Работает и в полноэкранном режиме.</td></tr>
+          <tr><td>Esc</td><td>По очереди: отменить рисование, вернуться к курсору, снять выделение, выйти из полного экрана.</td></tr>
+          <tr><td>Alt + M / H / T / B / F</td><td>Линейка, горизонтальная линия, линия тренда, прямоугольник, уровни Фибоначчи. Работает и в русской раскладке.</td></tr>
+          <tr><td>Ctrl + Z</td><td>Отменить последнее действие с рисунками.</td></tr>
+          <tr><td>Ctrl + Y или Ctrl + Shift + Z</td><td>Повторить отменённое действие.</td></tr>
+          <tr><td>Ctrl + D</td><td>Дублировать выбранный рисунок.</td></tr>
+          <tr><td>Del или Backspace</td><td>Удалить выбранный рисунок.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SOUNDS -->
+  <section class="section" id="sounds">
+    <h2 class="section-title"><span class="icon">🔔</span> Звуки и сообщения</h2>
+    <p class="section-sub">Бот сообщает о событиях звуком и всплывающим окошком — можно не смотреть в экран</p>
+
+    <div class="panel">
+      <div class="panel-title"><b>Какое событие — какой звук</b></div>
+      <table>
+        <thead><tr><th>Событие</th><th>Звук</th></tr></thead>
+        <tbody>
+          <tr><td>Покупка исполнилась, и бот выставил продажу</td><td><b>buy</b>, затем <b>placed</b></td></tr>
+          <tr><td>Продажа исполнилась, и бот выставил новую покупку</td><td><b>sell</b>, затем <b>placed</b></td></tr>
+          <tr><td>Покупка исполнилась, а продажу бот не ставит (автопродажа выключена)</td><td>только <b>buy</b></td></tr>
+          <tr><td>Продажа исполнилась, а новую покупку бот не ставит (повтор выключен или после ручной продажи)</td><td>только <b>sell</b></td></tr>
+          <tr><td>Выставлена сетка или продажа вручную</td><td><b>placed</b></td></tr>
+          <tr><td>Ордер или все ордера отменены</td><td><b>cancel</b></td></tr>
+          <tr><td>Ошибка или важное предупреждение (красное сообщение)</td><td><b>error</b></td></tr>
+          <tr><td>Обычная информация: цена обновлена, звук включён или выключен</td><td><b>info</b></td></tr>
+        </tbody>
+      </table>
+      <p style="color: var(--text-dim); margin-top: 8px;">Если два звука идут подряд, второй включается, когда закончился первый.</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Всплывающие сообщения</b></div>
+      <ul class="checklist">
+        <li>Появляются при каждом событии и исчезают сами через 10–20 секунд. На экране одновременно не больше шести.</li>
+        <li>Всё, что произошло, остаётся в блоке «Журнал» (с возможностью выгрузить в Excel) — даже если ты не увидел сообщение.</li>
+        <li>Если пока тебя не было накопилось много событий, сообщениями показываются только последние пять, остальные записываются в журнал.</li>
+        <li>Кнопка «🔊 Звук» отключает только звук, а не сообщения.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>«Звук заблокирован браузером. Кликните один раз в любом месте страницы»</b></div>
+      <ul class="checklist">
+        <li><b>Почему.</b> Браузеры не разрешают странице играть звук, пока ты не кликнул или не нажал клавишу на ней. Это правило браузера, а не ошибка бота. После каждой перезагрузки страницы (Ctrl+F5) оно действует заново.</li>
+        <li><b>Когда появляется.</b> Один раз после загрузки, если первое же сообщение со звуком пришло до твоего клика. Например, это может быть красное сообщение «Нет связи с сервером бота», если страницу открыли, а бот ещё запускается.</li>
+        <li><b>Что делать.</b> Кликни один раз в любом месте страницы. В журнале появится строка «🔊 Звук включён», и дальше звуки играют как обычно, до следующей перезагрузки страницы.</li>
+        <li><b>Как убрать совсем.</b> Разреши звук для адреса бота в настройках браузера — пошаговая инструкция ниже.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Как разрешить звук для вашего сайта (Edge, Chrome делается так же)</b></div>
+      <div class="api-steps">
+        <div class="api-step">
+          <div class="api-step-num">1</div>
+          <h4>Открой страницу бота</h4>
+          <p>Перейди на <span class="inline-code">127.0.0.1:8000</span>.</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">2</div>
+          <h4>Открой настройки сайта</h4>
+          <p>Нажми на значок слева от адреса (замок или значок настроек).</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">3</div>
+          <h4>Найди нужный пункт</h4>
+          <p>Выбери «Разрешения для этого сайта» и найди пункт <b style="color:var(--accent)">«Автовоспроизведение мультимедиа»</b> (в Chrome он называется <b style="color:var(--accent)">«Звук»</b>).</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">4</div>
+          <h4>Поставь «Разрешить»</h4>
+          <p>Выбери значение <b>«Разрешить»</b> для этого пункта.</p>
+        </div>
+        <div class="api-step">
+          <div class="api-step-num">5</div>
+          <h4>Перезагрузи страницу</h4>
+          <p>Обнови страницу (Ctrl+F5), чтобы настройка применилась.</p>
+        </div>
+      </div>
+
+      <p style="color: var(--text-dim); margin-top: 16px;">Если этого пункта нет, зайди сюда:</p>
+      <ul class="checklist">
+        <li>Edge: <span class="inline-code">edge://settings/content/mediaAutoplay</span></li>
+        <li>Chrome: <span class="inline-code">chrome://settings/content/sound</span></li>
+      </ul>
+      <p style="color: var(--text-dim); margin-top: 8px;">Там в разделе «Разрешить воспроизведение звука» нажми «Добавить» и вставь <span class="inline-code">http://127.0.0.1:8000</span>.</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Свои звуки</b></div>
+      <p style="color: var(--text-dim);">Звуки лежат в папке <span class="inline-code">Data/sounds/</span> и называются <span class="inline-code">buy.mp3</span>, <span class="inline-code">sell.mp3</span>, <span class="inline-code">placed.mp3</span>, <span class="inline-code">cancel.mp3</span>, <span class="inline-code">info.mp3</span>, <span class="inline-code">error.mp3</span>. Чтобы поменять звук, замени файл на свой с тем же именем и нажми Ctrl+F5. Если файла нет, вместо него прозвучит простой писк.</p>
+    </div>
+
+    <div class="alert warning">
+      <div class="alert-icon">🔇</div>
+      <div class="alert-content">
+        <div class="alert-title">Если звука нет</div>
+        <div class="alert-text">
+          1. <b>Кликни один раз по странице бота.</b> Браузеры запрещают звук, пока на странице не было ни одного клика. Если звук заблокирован, бот сам покажет подсказку; после клика появится запись «Звук включён».<br>
+          2. Проверь кнопку: должна быть «🔊 Звук», а не «🔇 Без звука». Проверь, что звук вкладки не отключён в браузере и в Windows.<br>
+          3. <b>Держи открытой одну вкладку с ботом.</b> Если открыть две, звук будет играть в каждой.<br>
+          4. <b>Звук в фоне.</b> Если страница не на виду (другая вкладка, свёрнутый браузер), Edge и Chrome могут «усыплять» вкладку. Добавь адрес <span class="inline-code">127.0.0.1</span> в исключения: в Edge это «Настройки → Система и производительность → Оптимизировать производительность → Никогда не переводить эти сайты в спящий режим», в Chrome — «Настройки → Производительность → Экономия памяти → Всегда оставлять эти сайты активными». Названия пунктов в разных версиях немного отличаются.<br>
+          5. Компьютер не должен уходить в сон, а окно с ботом (чёрное) должно быть открыто.<br>
+          6. После замены файлов нажми Ctrl+F5.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section" id="tools">
+    <h2 class="section-title"><span class="icon">🧰</span> Графики, бэктест, Excel</h2>
+    <p class="section-sub">Дополнительные страницы открываются кнопками в правом верхнем углу блоков</p>
+
+    <div class="panel">
+      <div class="panel-title"><b>⬇ График с ордерами</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Отдельная страница со свечным графиком и твоими ордерами поверх него. Цены для графика берутся с публичного API Binance и используются только для картинки; торговля идёт на MEXC и от графика не зависит.</p>
+      <ul class="checklist">
+        <li>Зелёные линии — твои открытые покупки, красные — продажи; цена написана прямо на линии.</li>
+        <li>Синяя линия — средняя цена покупки по активным позициям (та же цифра, что в «Статистике бота»). Пока позиций нет, линии нет.</li>
+        <li>Таймфреймы: 1м, 5м, 15м, 1ч, 4ч, 1д, 1н. Переключатель монет — как на главном экране.</li>
+        <li>Цена обновляется в реальном времени, страницу перезагружать не нужно. Справа вверху — статус «LIVE · BINANCE WS» и время последнего обновления.</li>
+        <li>Кнопка с солнцем рядом со статусом переключает светлую и тёмную тему. Выбор запоминается в браузере.</li>
+        <li>Если бот временно не отвечает, линии остаются на последних известных значениях, а над таблицей появляется жёлтое предупреждение «Нет связи с ботом».</li>
+        <li>Управление: перетаскивание — сдвиг, колесо мыши — масштаб, двойной клик — вернуться к текущей цене. Кнопка «↺ Сбросить масштаб» делает то же самое.</li>
+        <li>Кнопки «‹» и «›» над графиком (или клавиши <span class="inline-code">←</span> и <span class="inline-code">→</span>) переключают монеты из списка. Кнопка со стрелками включает полный экран, выйти из него можно по <span class="inline-code">Esc</span>.</li>
+      </ul>
+
+      <div class="panel-title" style="margin-top: 18px;"><b>Рисование на графике</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Панель инструментов стоит внизу справа. Её можно перетащить мышью или пальцем за ручку «⋮», за границы графика она не уйдёт.</p>
+      <table>
+        <thead><tr><th>Инструмент</th><th>Что делает</th></tr></thead>
+        <tbody>
+          <tr><td>Курсор (<span class="inline-code">Esc</span>)</td><td>Обычный режим: двигать график, выбирать и править нарисованное.</td></tr>
+          <tr><td>Линейка (<span class="inline-code">Alt+M</span>)</td><td>Показывает разницу по цене, в процентах, число свечей и время между двумя точками.</td></tr>
+          <tr><td>Горизонтальная линия (<span class="inline-code">Alt+H</span>)</td><td>Ставится одним кликом на нужной цене.</td></tr>
+          <tr><td>Линия тренда (<span class="inline-code">Alt+T</span>)</td><td>Прямая между двумя точками.</td></tr>
+          <tr><td>Прямоугольник (<span class="inline-code">Alt+B</span>)</td><td>Область по цене и времени.</td></tr>
+          <tr><td>Уровни Фибоначчи (<span class="inline-code">Alt+F</span>)</td><td>Набор уровней между двумя точками.</td></tr>
+          <tr><td>Магнит</td><td>Привязывает точки к свечам и к ценам открытия, максимума, минимума и закрытия.</td></tr>
+          <tr><td>Отменить / Повторить</td><td><span class="inline-code">Ctrl+Z</span> и <span class="inline-code">Ctrl+Y</span> (или <span class="inline-code">Ctrl+Shift+Z</span>).</td></tr>
+          <tr><td>Корзина</td><td>Удаляет все рисунки текущей монеты. Это можно отменить через <span class="inline-code">Ctrl+Z</span>.</td></tr>
+        </tbody>
+      </table>
+      <ul class="checklist" style="margin-top: 12px;">
+        <li>У выбранного рисунка появляется маленькая панель: цвет, толщина, стиль линии (сплошная, штрих, точки), продолжение вправо, блокировка, копия (<span class="inline-code">Ctrl+D</span>) и удаление (<span class="inline-code">Del</span> или <span class="inline-code">Backspace</span>).</li>
+        <li>Правая кнопка мыши открывает меню: «Сбросить масштаб», «Карточка ордера» (включает и выключает всплывающую карточку ордера у линии), «Копировать цену» (копирует цену под курсором). Если нажать на рисунок, в меню добавятся «Дублировать», «Заблокировать» и «Удалить рисунок».</li>
+        <li>Рисунки хранятся в браузере, отдельно для каждой монеты. Если открыть бота по другому адресу (например, <span class="inline-code">localhost</span> вместо <span class="inline-code">127.0.0.1</span>) или очистить данные сайта, рисунки пропадут. На торговлю они никак не влияют.</li>
+      </ul>
+      <div class="alert info" style="margin-top: 12px;">
+        <div class="alert-icon">👁️</div>
+        <div class="alert-content">
+          <div class="alert-title">Только просмотр</div>
+          <div class="alert-text">С графика нельзя отменить или изменить ордер, рисунки на него не влияют. Для управления ордерами вернись на главный экран.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>⬇ Полная статистика</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Страница с графиком твоих реальных сделок: зелёные точки — покупки, красные — продажи, линии показывают точки отсчёта.</p>
+      <ul class="checklist">
+        <li>Период: 1, 3, 6 или 12 месяцев (кнопки сверху).</li>
+        <li>Циклы: сколько завершено (покупка → продажа), реализованная прибыль, средний профит за цикл, лучший, медианный и худший цикл, доля уже закрытых позиций из всех («закрыто из всех», рядом win rate закрытых: он почти всегда 100%, потому что бот не продаёт в минус), среднее время цикла и частота (циклов в день).</li>
+        <li>Деньги: ROI на вложенный капитал (к обороту; к замороженным деньгам — во всплывающей подсказке), капитал в обороте (заморожено плюс закрытые циклы), комиссии за период и проекция на месяц при том же темпе. Частота и проекция считаются от реального срока работы бота, если он короче выбранного периода (под сводкой это написано).</li>
+        <li>Риск: сколько открытых позиций сейчас ниже цены покупки и каков их бумажный убыток («в минусе сейчас»), число открытых позиций и сколько в них заморожено, нереализованный результат, худшая открытая позиция. Если бумажный убыток больше нуля, под сводкой показано, за сколько циклов и дней он окупится при текущем темпе.</li>
+        <li>«Бот vs Buy &amp; Hold»: сравнение с теми же покупками, если бы их не продавали, на те же деньги. Так сравнение честное: холд не получает выгоду от самой дешёвой цены периода.</li>
+        <li>Ниже — график накопленной прибыли по циклам и таблица последних завершённых циклов (кнопка «Показать все»).</li>
+        <li>Обновляется сама каждые 15 секунд. Статус «Обновление: 15с» и время последнего обновления — справа в строке периодов; пока вкладка неактивна, обновление стоит на паузе, а при возврате данные подгружаются сразу.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>⬇ Бэктест сетки</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Калькулятор для проб: подставь шаг, диапазон и тейк-профит и посмотри, как такая сетка вела бы себя на прошлых ценах. Реальные ордера не выставляются — это безопасная тренировка перед настоящим запуском.</p>
+      <ul class="checklist">
+        <li>Цены берутся с публичного API Binance. Период на выбор: 1, 3, 6 или 12 месяцев (для них используются свечи 1 час, 4 часа, 8 часов и 1 день).</li>
+        <li>Комиссия биржи учитывается: 0.1% с каждой стороны сделки. У твоего аккаунта на MEXC она может быть другой, поэтому прибыль на странице приблизительная.</li>
+        <li>Расчёт идёт по свечам, а что было внутри свечи, неизвестно. Чем крупнее свечи (8 часов, 1 день), тем оптимистичнее результат: один уровень мог успеть и продать, и купить заново за одну свечу. Для 1 и 3 месяцев оценка точнее.</li>
+        <li>Это история, а не обещание: на других ценах результат будет другим.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>⬇ Excel — выгрузка таблиц</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">В интерфейсе 7 кнопок «⬇ Excel». Каждая собирает файл .xlsx прямо в браузере и сразу предлагает его скачать:</p>
+      <table>
+        <thead><tr><th>Блок</th><th>Что в файле</th></tr></thead>
+        <tbody>
+          <tr><td>Уровни лимитных ордеров</td><td>Все уровни сетки: просадка, цена, монет, сумма в $, цена TP, итоги. Уровни глубже исторической просадки монеты выделены оранжевым.</td></tr>
+          <tr><td>Балансы</td><td>Балансы аккаунта по монетам.</td></tr>
+          <tr><td>Статистика бота</td><td>Сводные показатели: заработано, потрачено и получено, покупки и продажи, средняя цена.</td></tr>
+          <tr><td>Активные позиции</td><td>Открытые (ещё не проданные) позиции с прибылью или убытком по каждой.</td></tr>
+          <tr><td>Открытые ордера</td><td>Текущие открытые ордера бота: цена, объём, статус.</td></tr>
+          <tr><td>История ордеров</td><td>Все ордера бота за всё время.</td></tr>
+          <tr><td>Журнал</td><td>События из журнала (последние 200 записей) с типом: ошибка, покупка, продажа и т. д.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section" id="stats">
+    <h2 class="section-title"><span class="icon">📊</span> Статистика</h2>
+    <p class="section-sub">Что означают цифры на экране</p>
+
+    <div class="panel">
+      <div class="panel-title"><b>Блок «Статистика сетки» (расчёт до запуска)</b></div>
+      <table>
+        <thead><tr><th>Показатель</th><th>Что означает</th></tr></thead>
+        <tbody>
+          <tr><td>Ордеров</td><td>Сколько уровней в сетке и по сколько долларов каждый.</td></tr>
+          <tr><td>Всего вложено</td><td>Сколько USDT понадобится, если исполнятся все уровни. Эта сумма должна быть свободна на балансе.</td></tr>
+          <tr><td>Средняя цена входа</td><td>Средняя цена покупки, если исполнится вся сетка.</td></tr>
+          <tr><td>Куплено монет</td><td>Сколько монет купится, если исполнится вся сетка.</td></tr>
+          <tr><td>Профит за 1 цикл на ордер</td><td>Сколько приносит один исполненный уровень при продаже по TP.</td></tr>
+          <tr><td>Профит, если все уровни сработают по 1 разу</td><td>Итоговая прибыль одного круга по всей сетке. Капитал при этом остаётся в монете тем же.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Блок «Статистика бота» (реальные сделки)</b></div>
+      <table>
+        <thead><tr><th>Показатель</th><th>Что означает</th><th>Пример</th></tr></thead>
+        <tbody>
+          <tr><td>ПОКУПОК / ПРОДАЖ</td><td>Сколько ордеров исполнилось, сколько монет куплено и продано, какой остаток.</td><td>2 / 1</td></tr>
+          <tr><td>ПОТРАЧЕНО</td><td>Сколько USDT ушло на покупки.</td><td>$2.08</td></tr>
+          <tr><td>ПОЛУЧЕНО</td><td>Сколько USDT пришло с продаж. Рядом — сумма, оставшаяся в ещё не проданных позициях.</td><td>$1.04</td></tr>
+          <tr><td>ЗАРАБОТАНО</td><td>Реализованная прибыль после комиссий: в долларах и в процентах от суммы, вложенной в закрытые циклы.</td><td>+$0.40 · +2.42%</td></tr>
+          <tr><td>НЕРЕАЛИЗОВАННАЯ ПРИБЫЛЬ</td><td>Прибыль «на бумаге» по активным позициям. Меняется вместе с ценой и становится реальной после продажи.</td><td>+$0.05 · +2.54%</td></tr>
+          <tr><td>СРЕДНЯЯ ЦЕНА ПОКУПКИ</td><td>Средняя цена всех активных позиций (в том числе без ордера на продажу).</td><td>$70,441.29</td></tr>
+          <tr><td>ПОСЛЕДНЯЯ ПОКУПКА</td><td>Когда и на какую сумму была последняя покупка.</td><td>$71,248.48</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Блок «Балансы»</b></div>
+      <table>
+        <thead><tr><th>Показатель</th><th>Что означает</th></tr></thead>
+        <tbody>
+          <tr><td>Общий баланс</td><td>Весь аккаунт в USDT по текущим ценам монет.</td></tr>
+          <tr><td>USDT / выбранная монета</td><td>Сколько на аккаунте, свободно и в ордерах.</td></tr>
+          <tr><td>Свободно</td><td>Можно использовать для новых ордеров.</td></tr>
+          <tr><td>В ордерах</td><td>Зарезервировано биржей под открытые ордера (на покупку — USDT, на продажу — монеты). Это те же цифры, что показывает MEXC.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert info">
+      <div class="alert-icon">ℹ️</div>
+      <div class="alert-content">
+        <div class="alert-title">Как считается прибыль</div>
+        <div class="alert-text">
+          Каждая продажа привязана к своей конкретной покупке, поэтому позиции можно закрывать в любом порядке — не обязательно самую старую первой.
+          Процент в «Заработано» считается от денег, вложенных в закрытые циклы: при тейк-профите 4% он будет около 4%.
+          Открытые позиции в эту сумму не входят — их прибыль ещё не зафиксирована.
+          Плашка «Заработано» в шапке складывает результат по всем монетам сразу, а блок «Статистика бота» показывает только выбранную монету.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAFETY -->
+  <section class="section" id="safety">
+    <h2 class="section-title"><span class="icon">🛡️</span> Безопасность, лимиты и сбои</h2>
+    <p class="section-sub">Что будет, если пропадёт свет или интернет, и как бот обращается с ордерами</p>
+
+    <div class="alert success">
+      <div class="alert-icon">✅</div>
+      <div class="alert-content">
+        <div class="alert-title">Короткий ответ: ты ничего не потеряешь</div>
+        <div class="alert-text">Твои ордера физически лежат на серверах биржи MEXC. Если компьютер выключится или пропадёт интернет, ордера продолжат ждать на бирже и исполнятся, когда цена до них дойдёт. Бот в это время просто не будет ставить встречные ордера — он сделает это, как только запустится.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Что делает бот при сбоях</b></div>
+      <ul class="checklist">
+        <li><b>Безопасное сохранение.</b> Своё состояние бот записывает сначала во временный файл и только потом подменяет им основной <span class="inline-code">Data/autosell.json</span>. Если свет выключится прямо во время записи, основной файл не пострадает. Раз в час бот делает копию в папку <span class="inline-code">backups/</span>.</li>
+        <li><b>Сверка после запуска.</b> При старте бот сравнивает свой журнал с реальными ордерами на бирже. Если ордер исполнился, пока бот был выключен, он это заметит, учтёт сделку и выставит встречный ордер.</li>
+        <li><b>Спокойное ожидание связи.</b> Если пропал интернет, бот не засыпает биржу запросами: он подождёт, запишет предупреждение в журнал и вернётся к работе, когда связь появится.</li>
+        <li><b>Расхождение времени.</b> Если часы компьютера разошлись с часами биржи (например, после сна), бот сам пересчитывает поправку и повторяет запрос.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Ручные действия на бирже</b></div>
+      <div class="alert info">
+        <div class="alert-icon">ℹ️</div>
+        <div class="alert-content">
+          <div class="alert-title">Бот управляет только своими ордерами</div>
+          <div class="alert-text">
+            Он отслеживает те ордера, которые выставил сам (или через кнопку «Продать» в своём интерфейсе). Чужие и ручные ордера на бирже он не трогает.<br><br>
+            Если ты отменил или изменил ордер бота прямо на сайте MEXC, то при ближайшей проверке (через 3 секунды) бот увидит, что ордера нет, и уберёт его из наблюдения. Цикл этого уровня прервётся, остальные продолжат работать.
+            Если отменена продажа по TP, позиция останется в «Активных позициях» с кнопкой «Продать» — нажми её, и бот выставит новую продажу (одна строка, без дублей).
+          </div>
+        </div>
+      </div>
+      <div class="alert warning" style="margin-top: 12px;">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <div class="alert-title">Лучше управлять через интерфейс бота</div>
+          <div class="alert-text">Пока бот работает, не отменяй и не меняй ордера этой пары на сайте биржи — это нарушает цикл «покупка → продажа». Для отмены используй «Отменить», для ручной продажи — «Продать» в интерфейсе бота: она проверит цену, закроет цикл и не вызовет повторную покупку.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Лимиты и сколько ордеров можно держать</b></div>
+      <div class="highlight-box">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+          <div><div class="big-num">60</div><div class="label">уровней за один раз выставляет бот</div></div>
+          <div><div class="big-num">≤ 200</div><div class="label">ордеров на одну монету — рекомендуемо</div></div>
+          <div><div class="big-num">≤ 400</div><div class="label">ордеров всего на пару монет</div></div>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Что</th><th>Лимит биржи</th><th>Рекомендация</th></tr></thead>
+        <tbody>
+          <tr><td>Открытых ордеров на аккаунте</td><td>500</td><td>до 350–400</td></tr>
+          <tr><td>На одну монету</td><td>около 200–300</td><td>до 200</td></tr>
+          <tr><td>Выставление ордеров в секунду</td><td>5</td><td>3–4 (бот сам ставит ордера по очереди с паузами)</td></tr>
+        </tbody>
+      </table>
+      <div class="alert info" style="margin-top: 12px;">
+        <div class="alert-icon">ℹ️</div>
+        <div class="alert-content">
+          <div class="alert-title">Как считаются ордера</div>
+          <div class="alert-text">
+            Один уровень сетки в любой момент держит <b>ровно один</b> открытый ордер: либо покупку, которая ещё не сработала, либо (после покупки) продажу. Продажа не добавляется к покупке — она встаёт на её место.
+            Поэтому 40 уровней дают не больше 40 одновременных ордеров, сколько бы раз они ни исполнялись.
+            После исполнения продажи бот по умолчанию сразу ставит новую покупку на этом же уровне — уровень продолжает работать, а не выбывает.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Встроенные защиты</b></div>
+      <ul class="checklist">
+        <li>Окно подтверждения перед выставлением сетки, отменой всех ордеров и отменой отдельного ордера.</li>
+        <li>Проверка цены каждого уровня: бот отклоняет покупку выше рынка и цену, которая слишком далека от рыночной (защита от опечатки, например лишнего нуля).</li>
+        <li>Повторная отправка той же сетки в течение 90 секунд отклоняется — защита от двойного клика и двух открытых вкладок.</li>
+        <li>Ограничение частоты действий: не больше 20 выставлений сетки, 10 отмен всех ордеров и 30 отмен отдельных ордеров в минуту.</li>
+        <li>Размер журнала событий и истории сделок ограничен, поэтому файлы не разрастаются бесконечно: по умолчанию хранятся последние 5000 записей истории ордеров, 10 000 сделок, 20 000 закрытых позиций и 1000 событий. Что старше, в статистике уже не учитывается (пределы можно поменять в <span class="inline-code">.env</span>).</li>
+        <li>Слежение за сроком API-ключа с цветным индикатором.</li>
+        <li>Аккуратная остановка по <span class="inline-code">Ctrl+C</span>: бот успевает сохранить состояние.</li>
+      </ul>
+    </div>
+
+    <div class="alert danger">
+      <div class="alert-icon">🔴</div>
+      <div class="alert-content">
+        <div class="alert-title">Что будет, если превысить лимиты биржи</div>
+        <div class="alert-text">
+          Биржа ответит ошибкой «слишком много запросов» (код 429) и временно закроет доступ к API — обычно на несколько минут. При повторных нарушениях блокировка может быть дольше.
+          Это блокировка доступа программы, а не потеря денег: средства на балансе остаются на месте, ордера на бирже тоже.
+          Бот ставит ордера по очереди с паузами и обычно не подходит к этим границам.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRATEGIES -->
+  <section class="section" id="strategies">
+    <h2 class="section-title"><span class="icon">🎯</span> Готовые настройки</h2>
+    <p class="section-sub">Три кнопки из «Быстрых настроек» — выбери под свой характер</p>
+
+    <div class="strategy">
+      <div class="strategy-header">
+        <div class="strategy-title">🛡️ Консервативный</div>
+        <div class="strategy-badge">Низкий риск</div>
+      </div>
+      <div class="strategy-params">
+        <div class="param"><div class="param-label">Шаг</div><div class="param-value">10%</div></div>
+        <div class="param"><div class="param-label">Диапазон</div><div class="param-value">50%</div></div>
+        <div class="param"><div class="param-label">Уровней</div><div class="param-value">5</div></div>
+        <div class="param"><div class="param-label">Последний уровень</div><div class="param-value">≈ −41%</div></div>
+        <div class="param"><div class="param-label">Всего при $1.05</div><div class="param-value">≈ $5.25</div></div>
+      </div>
+      <div class="strategy-desc">Мало уровней с большим расстоянием. Покупки происходят редко и только при заметном падении, зато каждая покупка выгоднее. Подходит для знакомства с ботом и небольшой суммы.</div>
+    </div>
+
+    <div class="strategy warn">
+      <div class="strategy-header">
+        <div class="strategy-title">⚖️ Сбалансированный</div>
+        <div class="strategy-badge">Средний риск</div>
+      </div>
+      <div class="strategy-params">
+        <div class="param"><div class="param-label">Шаг</div><div class="param-value">5%</div></div>
+        <div class="param"><div class="param-label">Диапазон</div><div class="param-value">80%</div></div>
+        <div class="param"><div class="param-label">Уровней</div><div class="param-value">16</div></div>
+        <div class="param"><div class="param-label">Последний уровень</div><div class="param-value">≈ −56%</div></div>
+        <div class="param"><div class="param-label">Всего при $1.05</div><div class="param-value">≈ $16.80</div></div>
+      </div>
+      <div class="strategy-desc">Золотая середина для крупных монет: сетка перекрывает глубокие просадки, а сделки случаются достаточно часто. Хорошо работает, когда цена гуляет вверх-вниз.</div>
+    </div>
+
+    <div class="strategy danger">
+      <div class="strategy-header">
+        <div class="strategy-title">🔥 Агрессивный</div>
+        <div class="strategy-badge">Высокий риск</div>
+      </div>
+      <div class="strategy-params">
+        <div class="param"><div class="param-label">Шаг</div><div class="param-value">2.5%</div></div>
+        <div class="param"><div class="param-label">Диапазон</div><div class="param-value">120%</div></div>
+        <div class="param"><div class="param-label">Уровней</div><div class="param-value">48</div></div>
+        <div class="param"><div class="param-label">Последний уровень</div><div class="param-value">≈ −70%</div></div>
+        <div class="param"><div class="param-label">Всего при $1.05</div><div class="param-value">≈ $50.40</div></div>
+      </div>
+      <div class="strategy-desc">Много уровней близко друг к другу: сделок много, но много и одновременно открытых позиций, а на длинном падении в монете «зависает» больше денег. Следи за балансом USDT.</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Как подобрать настройки самому</b></div>
+      <ul class="checklist">
+        <li><b>Шаг</b> задаёт, как часто срабатывают уровни. Маленький шаг — много сделок, но маленькая «длина» сетки. Большой шаг — мало сделок, но сетка глубже.</li>
+        <li><b>Тейк-профит</b> — сколько ты берёшь с каждого круга. Обычно выбирают 2–5%. Чем он меньше, тем чаще продажа срабатывает, но тем меньше прибыль с круга (и сильнее влияет комиссия биржи).</li>
+        <li><b>Сумма ордера</b> × количество уровней = сколько USDT нужно держать свободными. Не вкладывай больше, чем готов заморозить надолго.</li>
+        <li>Из-за лимита в 60 уровней мелкий шаг даёт короткую сетку. Например, шаг 0.5% × 60 уровней покрывает падение только примерно на 26%.</li>
+        <li>Перед настоящим запуском можно прикинуть результат в «⬇ Бэктест сетки».</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TROUBLE -->
+  <section class="section" id="trouble">
+    <h2 class="section-title"><span class="icon">🐛</span> Частые вопросы и проблемы</h2>
+    <p class="section-sub">Что делать, если что-то пошло не так</p>
+
+    <div class="panel">
+      <div class="panel-title"><b>⚠️ Ордера не выставляются или часть уровней отклонена</b></div>
+      <ul class="checklist warn">
+        <li>Покупка стоит <b>выше текущей рыночной цены</b> — биржа такой уровень отклонит. Нажми «⟳ live», чтобы обновить стартовую цену, и проверь таблицу уровней.</li>
+        <li>Сумма ордера меньше минимальной (обычно около 1.05 USDT) — увеличь «Сумму ордера».</li>
+        <li>На балансе не хватает свободных USDT — сравни с «Всего вложено» в «Статистике сетки».</li>
+        <li>Уже открыто слишком много ордеров (лимит биржи 500 на аккаунт) — отмени лишние или уменьши сетку.</li>
+        <li>Вышло сообщение про «слишком много запросов» — подожди минуту и повтори.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>⚠️ После покупки нет продажи</b></div>
+      <ul class="checklist warn">
+        <li>Проверь, что включена «Автопродажа по TP: Вкл».</li>
+        <li>Подожди около 30 секунд: если продажу выставить не удалось, бот делает до 5 попыток.</li>
+        <li>Если не вышло, позиция появится в «Активных позициях» с кнопкой «Продать» — нажми её. Причина будет написана в «Журнале».</li>
+        <li>Посмотри в <span class="inline-code">Data/autosell.json</span> — исходный ордер должен числиться в разделе <span class="inline-code">watch</span>. Если что-то не так, перезапусти бота.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>❓ В истории написано «Отменён» — бот сломался?</b></div>
+      <div class="alert info"><div class="alert-icon">ℹ️</div><div class="alert-content"><div class="alert-title">Всё в порядке</div><div class="alert-text">Это значит, что ордер отменила биржа или ты вручную. Бот заметил это, записал в историю и убрал ордер из наблюдения. Никаких «возвратов» он не делает и не зависает.</div></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>❓ Я вручную отменил или изменил ордер на бирже</b></div>
+      <div class="alert info"><div class="alert-icon">ℹ️</div><div class="alert-content"><div class="alert-title">Ничего страшного</div><div class="alert-text">При ближайшей проверке (через 3 секунды) бот увидит, что ордера нет, и уберёт его из наблюдения. Этот уровень прекратит цикл, остальные продолжат работать. Чтобы такого не было, отменяй ордера и продавай позиции кнопками в самом боте.</div></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>🔇 Нет звука</b></div>
+      <p style="color: var(--text-dim);">Кликни один раз по странице бота, проверь кнопку «🔊 Звук», держи открытой одну вкладку и добавь адрес бота в исключения «спящих вкладок». Подробный список — в разделе «Звуки и сообщения».</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>🔑 «API Key expired» или «Invalid API Key»</b></div>
+      <div class="alert danger"><div class="alert-icon">🔴</div><div class="alert-content"><div class="alert-title">Решение</div><div class="alert-text">Скорее всего, срок действия ключа истёк. Создай новый на <b>mexc.com/user/openapi</b>, впиши <span class="inline-code">MEXC_API_KEY</span>, <span class="inline-code">MEXC_SECRET_KEY</span> и <span class="inline-code">API_KEY_CREATED</span> в <span class="inline-code">.env</span> и перезапусти бота. Если ключ новый, проверь, что в нём нет лишних пробелов и включены нужные права.</div></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>🔑 Срок ключа в боте не совпадает с биржей</b></div>
+      <ul class="checklist warn">
+        <li>Открой в браузере <span class="inline-code">http://localhost:8000/api/ping</span> и найди поле <span class="inline-code">api_source</span>.</li>
+        <li><span class="inline-code">"exchange"</span> — срок взят прямо у MEXC, он должен совпадать с личным кабинетом с точностью до дня.</li>
+        <li><span class="inline-code">"env"</span> — биржа не ответила, и срок посчитан по <span class="inline-code">API_KEY_CREATED</span> и <span class="inline-code">API_KEY_DAYS</span> из <span class="inline-code">.env</span>. Впиши точные дату и время создания ключа в кавычках, например <span class="inline-code">"2026-08-18 17:29:29"</span>. Если указать только дату, дни могут отличаться от биржи на 1.</li>
+        <li>После правки <span class="inline-code">.env</span> перезапусти бота.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>💱 «В ордерах» не равно сумме ордеров из истории</b></div>
+      <div class="alert info"><div class="alert-icon">ℹ️</div><div class="alert-content"><div class="alert-title">Это разное округление</div><div class="alert-text">«В ордерах» — сумма, которую биржа реально зарезервировала. Она округляет резерв по каждому ордеру отдельно (1.0496 USDT может стать 1.05), а «Сумма» в истории — это цена × количество, обрезанная до цента. Чем больше ордеров, тем больше разница, но ошибки нет: «Свободно» + «В ордерах» = «Всего».</div></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>💱 Цена продажи отличается на 0.01 от цены автоордера</b></div>
+      <ul class="checklist warn">
+        <li>Кнопка «Продать» берёт TP позиции, если процент в поле «Тейк-профит» не менялся. Если процент другой, цена пересчитывается от цены покупки.</li>
+        <li>TP считается от реальной цены исполнения покупки. Если процент у ордера не сохранился, он восстанавливается из цен, и возможна разница до 1 цента.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>📁 Нет файла Data/autosell.json</b></div>
+      <ul class="checklist warn">
+        <li>Файл лежит в папке <span class="inline-code">Data/</span> рядом с <span class="inline-code">main.py</span> и создаётся автоматически при первом запуске.</li>
+        <li>Если его нет после запуска, открой <span class="inline-code">logs/backend.log</span> и найди строки со словами «сохранить» или «CRITICAL». Проверь права на папку, антивирус и OneDrive.</li>
+        <li>Если сетка выставлялась, пока файла не было, бот эти ордера не отслеживает. Отмени их на бирже и выставь сетку заново.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>🕐 Ошибка 700003 «Timestamp is outside of the recvWindow»</b></div>
+      <div class="alert info"><div class="alert-icon">ℹ️</div><div class="alert-content"><div class="alert-title">Время компьютера и биржи разошлось</div><div class="alert-text">Каждый запрос подписывается текущим временем, и биржа принимает его, только если часы почти совпадают. Расхождение бывает после сна компьютера или синхронизации времени Windows. Бот сам пересчитывает поправку и повторяет запрос, поэтому обычно это видно только в <span class="inline-code">logs/backend.log</span>. Если ошибка повторяется, включи синхронизацию времени Windows: Параметры → Время и язык → Дата и время → «Синхронизировать».</div></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>🌐 Данные не загружаются, везде «—», красное сообщение «Нет связи с сервером бота», индикатор «Ошибка подключения»</b></div>
+      <ul class="checklist warn">
+        <li>Проверь, что чёрное окно с ботом открыто и не показывает ошибок. Если закрыто — запусти <span class="inline-code">start.bat</span> заново.</li>
+        <li>Сообщение о потере связи показывается <b>один раз</b> на всю потерю, а не по штуке от каждого блока страницы. Когда бот снова ответит, придёт одно «Связь восстановлена», страницу перезагружать не нужно. Если ты только что перезапускал бота, подожди 10–20 секунд.</li>
+        <li>Открой интерфейс по адресу <span class="inline-code">http://localhost:8000</span> и нажми Ctrl+F5.</li>
+        <li>Если окно с ботом открыто, но ошибки идут — смотри <span class="inline-code">logs/backend.log</span>.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>⚠️ «MEXC не отвечает или отвечает ошибкой (503, таймаут или лимит запросов)», в журнале «service not available»</b></div>
+      <ul class="checklist warn">
+        <li>Это временный сбой самой биржи: сервер MEXC недоступен или перегружен. Ключи, интернет и бот в порядке.</li>
+        <li>Пока биржа молчит, бот не знает статусов ордеров, но <b>ничего не отменяет и не снимает с наблюдения</b>. Когда биржа вернётся, всё, что исполнилось за это время, обработается в ближайшем цикле.</li>
+        <li>Чтобы не засыпать экран, бот не проверяет каждый ордер отдельно, а показывает одно сообщение на монету (не чаще раза в 10 минут). Делать ничего не нужно.</li>
+        <li>Если такое повторяется часто, посмотри статус MEXC в их сообщениях или в соцсетях и проверь VPN или прокси.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>🔄 Стартовая цена показывает странное значение или 0</b></div>
+      <p style="color: var(--text-dim);">Нажми «⟳ live» — подставится текущая цена. Значения меньше 0.000000001 бот не принимает и сам возвращает прежнюю нормальную цену.</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>🪙 Монеты нет в переключателе или кнопка не появилась</b></div>
+      <ul class="checklist warn">
+        <li>Проверь, что строка есть в <span class="inline-code">tokens.txt</span> и не начинается с <span class="inline-code">#</span> (это комментарий).</li>
+        <li>Файл должен лежать рядом с <span class="inline-code">main.py</span> или в папке <span class="inline-code">Data/</span>. Проверь, открывается ли он по адресу <span class="inline-code">http://localhost:8000/tokens.txt</span>.</li>
+        <li>Подожди до 30 секунд: страницы перечитывают файл раз в полминуты.</li>
+        <li>Проверь тикер на mexc.com (спот, пара к USDT). Монета, которой нет на бирже, на главной странице не показывается.</li>
+        <li>На странице графика не будет монет, которых нет на Binance: цены берутся оттуда.</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>🔬 Монета с очень маленькой ценой (PEPE, SHIB, BONK…)</b></div>
+      <div class="alert info"><div class="alert-icon">ℹ️</div><div class="alert-content"><div class="alert-title">Это нормально</div><div class="alert-text">У таких монет цена — доли цента, поэтому она показывается с большим числом знаков после запятой (например, <span class="inline-code">$0.000003947</span>), а монет в сетке получаются миллионы. Точность цены и количества бот берёт у биржи для каждой пары отдельно, так что в таблицах, окнах подтверждения и Excel цена не обрезается до двух знаков.</div></div></div>
+      <ul class="checklist" style="margin-top: 12px;">
+        <li>Сумма ордера по-прежнему в долларах (минимум около 1.05 USDT), а количество монет округляется вниз до точности биржи, поэтому «Сумма» в таблице уровней получается чуть меньше заданной.</li>
+        <li>«Средняя цена входа» и «Стартовая цена» тоже показываются с точностью рынка. Если видишь <b>$0.00</b>, нажми Ctrl+F5: страница, скорее всего, осталась старой версии.</li>
+        <li>Стартовая цена не может быть меньше 0.000000001.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TECH -->
+  <section class="section" id="tech">
+    <h2 class="section-title"><span class="icon">🔧</span> Для продвинутых</h2>
+    <p class="section-sub">Файлы проекта, адреса сервера и проверки — новичку этот раздел не нужен</p>
+
+    <div class="panel">
+      <div class="panel-title"><b>Структура папок</b></div>
+      <div class="code-block">📁 CoinSteps/
+├── main.py            <span class="comment"># Сервер бота</span>
+├── .env               <span class="comment"># API-ключи и настройки</span>
+├── tokens.txt         <span class="comment"># Список монет (можно и в Data/)</span>
+├── CoinSteps.html     <span class="comment"># Главная страница (интерфейс)</span>
+├── start.bat          <span class="comment"># Запуск на Windows</span>
+├── backups/           <span class="comment"># Автоматические копии состояния (раз в час)</span>
+├── logs/              <span class="comment"># backend.log — подробный журнал (в чёрном окне только важное)</span>
+└── Data/
+    ├── autosell.json  <span class="comment"># Состояние бота (создаётся при первом запуске)</span>
+    ├── trade_log.json <span class="comment"># Локальный кэш сделок с биржи</span>
+    ├── help.html      <span class="comment"># Эта страница</span>
+    ├── live-chart.html    <span class="comment"># График с ордерами</span>
+    ├── backtest.html      <span class="comment"># Полная статистика сделок</span>
+    ├── Grid_backtest.html <span class="comment"># Бэктест сетки</span>
+    ├── common.css     <span class="comment"># Общая шапка страниц</span>
+    ├── common.js      <span class="comment"># Общие функции: список монет из tokens.txt</span>
+    ├── img/           <span class="comment"># Логотип, значок</span>
+    └── sounds/        <span class="comment"># buy, sell, placed, cancel, info, error (.mp3)</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Дополнительные настройки в .env</b></div>
+      <p style="color: var(--text-dim); margin-bottom: 12px;">Всё ниже необязательно: у каждого параметра есть разумное значение по умолчанию.</p>
+      <table>
+        <thead><tr><th>Параметр</th><th>Что задаёт</th><th>По умолчанию</th></tr></thead>
+        <tbody>
+          <tr><td>WATCH_INTERVAL</td><td>Как часто бот проверяет ордера, секунд</td><td>3</td></tr>
+          <tr><td>TIME_SYNC_INTERVAL</td><td>Как часто сверять часы компьютера с биржей, секунд</td><td>60</td></tr>
+          <tr><td>RECV_WINDOW_MS</td><td>Допустимое расхождение часов, мс (максимум 60000)</td><td>30000</td></tr>
+          <tr><td>MAX_GRID_DEVIATION</td><td>Насколько цена уровня может отличаться от рыночной (0.97 = 97%) — защита от опечатки</td><td>0.97</td></tr>
+          <tr><td>TRACKED_SYMBOLS</td><td>Запасной список пар, если файла tokens.txt нет (основной список — в tokens.txt)</td><td>BTC/USDT,ETH/USDT</td></tr>
+          
+          <tr><td>ALLOWED_ORIGINS</td><td>С каких адресов разрешён доступ к серверу. <b>*</b> значит «с любого сайта». Безопаснее указать адрес бота: <span class="inline-code">http://127.0.0.1:8000,http://localhost:8000</span>. Страницы бота, открытые с самого сервера, от этого работать не перестанут</td><td>*</td></tr>
+          <tr><td>BACKUP_INTERVAL</td><td>Как часто делать копию состояния в папку backups/, секунд</td><td>3600</td></tr>
+          <tr><td>BACKUP_MIN_INTERVAL</td><td>Не чаще чем раз в сколько секунд копировать файл при частых записях</td><td>300</td></tr>
+          <tr><td>MAX_BACKUPS_PER_FILE</td><td>Сколько копий хранить для каждого файла</td><td>100</td></tr>
+          <tr><td>TRADES_SYNC_TTL</td><td>Как часто подтягивать сделки с биржи в Data/trade_log.json, секунд</td><td>60</td></tr>
+          <tr><td>CACHE_TTL_TICKER</td><td>Сколько секунд держать цену и список открытых ордеров, чтобы не спрашивать биржу лишний раз</td><td>2</td></tr>
+          <tr><td>CACHE_TTL_BALANCE</td><td>То же для балансов, секунд</td><td>5</td></tr>
+          <tr><td>CACHE_TTL_TRADES</td><td>То же для списка сделок, секунд</td><td>5</td></tr>
+          <tr><td>CACHE_TTL_APIKEY_INFO</td><td>Как часто спрашивать у биржи срок API-ключа, секунд</td><td>300</td></tr>
+          <tr><td>EXCHANGE_TIMEOUT_MS</td><td>Сколько ждать ответа биржи, мс</td><td>30000</td></tr>
+          <tr><td>WORKER_THREADS</td><td>Число потоков для запросов к бирже</td><td>4</td></tr>
+          <tr><td>MAX_GRID_LEVELS</td><td>Сколько уровней можно отправить за один запрос выставления сетки (защита от случайных огромных сеток; интерфейс отправляет не больше 60)</td><td>100</td></tr>
+          <tr><td>ORDER_MIN_INTERVAL</td><td>Минимальная пауза между выставлением ордеров, секунд. MEXC принимает не больше 5 ордеров в секунду, 0.25 с даёт 4 в секунду. Одиночный ордер не ждёт, пауза работает только в серии (сетка, много исполнений сразу)</td><td>0.25</td></tr>
+          <tr><td>MAX_ORDERS_LOG</td><td>Сколько записей хранить в истории ордеров</td><td>5000</td></tr>
+          <tr><td>MAX_TRADES_IN_LOG</td><td>Сколько сделок хранить в Data/trade_log.json</td><td>10000</td></tr>
+          <tr><td>MAX_DONE_IN_STATE</td><td>Сколько закрытых позиций помнить в Data/autosell.json</td><td>20000</td></tr>
+          <tr><td>MAX_EVENTS_IN_STATE</td><td>Сколько событий для сообщений хранить</td><td>1000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Адреса сервера (API)</b></div>
+      <table>
+        <thead><tr><th>Метод</th><th>Путь</th><th>Что делает</th></tr></thead>
+        <tbody>
+          <tr><td>GET</td><td>/api/ping</td><td>Проверка подключения и срока ключа</td></tr>
+          <tr><td>GET</td><td>/api/balance</td><td>Балансы аккаунта</td></tr>
+          <tr><td>GET</td><td>/api/balance-total</td><td>Общий баланс в USDT</td></tr>
+          <tr><td>GET</td><td>/api/ticker</td><td>Текущая цена</td></tr>
+          <tr><td>GET</td><td>/api/tickers</td><td>Цены сразу по нескольким монетам одним запросом</td></tr>
+          <tr><td>GET</td><td>/api/market-info</td><td>Точность цены и количества, минимальные лимиты биржи по парам</td></tr>
+          <tr><td>GET</td><td>/tokens.txt</td><td>Список монет (его читают страницы бота)</td></tr>
+          <tr><td>GET</td><td>/api/open-orders</td><td>Открытые ордера</td></tr>
+          <tr><td>GET</td><td>/api/trades</td><td>История сделок</td></tr>
+          <tr><td>GET</td><td>/api/orders-log</td><td>Журнал ордеров бота</td></tr>
+          <tr><td>GET</td><td>/api/autosell</td><td>Состояние автопродажи и позиций</td></tr>
+          <tr><td>GET</td><td>/api/events</td><td>События для сообщений и звуков</td></tr>
+          <tr><td>POST</td><td>/api/events/ack</td><td>Подтвердить получение событий</td></tr>
+          <tr><td>POST</td><td>/api/place-grid</td><td>Выставить сетку</td></tr>
+          <tr><td>POST</td><td>/api/autosell</td><td>Включить или выключить автопродажу</td></tr>
+          <tr><td>DELETE</td><td>/api/order/{id}</td><td>Отменить один ордер</td></tr>
+          <tr><td>POST</td><td>/api/cancel-all</td><td>Отменить все ордера бота</td></tr>
+          <tr><td>GET</td><td>/Data/{файл}</td><td>Дополнительные страницы (график, бэктест, справка)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title"><b>Быстрая диагностика</b></div>
+      <div class="code-block"><span class="comment"># Подключение и срок ключа</span>
+curl http://localhost:8000/api/ping
+
+<span class="comment"># Балансы</span>
+curl http://localhost:8000/api/balance
+
+<span class="comment"># Открытые ордера по монетам</span>
+curl "http://localhost:8000/api/open-orders?symbol=BTC/USDT"
+curl "http://localhost:8000/api/open-orders?symbol=ETH/USDT"</div>
+    </div>
+
+    <div class="alert success">
+      <div class="alert-icon">✅</div>
+      <div class="alert-content">
+        <div class="alert-title">Совет: делай резервные копии</div>
+        <div class="alert-text">В файле <span class="inline-code">Data/autosell.json</span> хранится вся «память» бота. Если его потерять, бот забудет, какие ордера его. Раз в какое-то время копируй этот файл, а также храни копию <span class="inline-code">.env</span> в надёжном месте (но не в открытом доступе).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKLISTS -->
+  <section class="section" id="checklists">
+    <h2 class="section-title"><span class="icon">✅</span> Чек-листы</h2>
+    <p class="section-sub">Что проверить перед работой, во время неё и при остановке</p>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-title"><b>Перед запуском</b></div>
+        <ul class="checklist">
+          <li>Установлен Python (с галочкой PATH)</li>
+          <li>Получены API-ключи на mexc.com/user/openapi</li>
+          <li>Включены права: Spot Reading, Spot Trading, Account Reading</li>
+          <li>Вывод средств (Withdraw) не включён</li>
+          <li>Ключ привязан к IP-адресу (по возможности)</li>
+          <li>Заполнен .env: ключи, API_KEY_CREATED, API_KEY_DAYS</li>
+          <li>На балансе есть свободные USDT</li>
+          <li>Первая проба — на маленькую сумму (5–10 USDT)</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><b>Во время работы</b></div>
+        <ul class="checklist">
+          <li>Окно с ботом открыто, компьютер не засыпает</li>
+          <li>Открыта одна вкладка с интерфейсом, звук включён</li>
+          <li>Открытых ордеров не больше 400</li>
+          <li>Срок ключа зелёный (иначе — пора менять)</li>
+          <li>В «Журнале» нет повторяющихся красных ошибок</li>
+          <li>Время от времени копируется Data/autosell.json</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-title"><b>При остановке</b></div>
+        <ul class="checklist">
+          <li>Остановить бота: Ctrl+C в чёрном окне</li>
+          <li>Решить, нужны ли ещё ордера на бирже (при необходимости — «Отменить все ордера» до остановки)</li>
+          <li>Сохранить копию Data/autosell.json</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><b>Нельзя делать</b></div>
+        <ul class="checklist danger">
+          <li>Включать право Withdraw на API-ключе</li>
+          <li>Показывать .env или выкладывать его в интернет</li>
+          <li>Закрывать окно бота резко (без Ctrl+C)</li>
+          <li>Удалять Data/autosell.json, пока на бирже висят ордера бота</li>
+          <li>Выставлять больше 200 ордеров на одну монету</li>
+          <li>Вручную отменять ордера бота на сайте биржи</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cards" style="margin-top: 24px;">
+      <div class="card"><div class="card-icon">📉</div><h3>Рынок падает</h3><p>Это нормально: сетка покупает дешевле. Чем ниже цена, тем выгоднее средняя цена накопленных монет.</p></div>
+      <div class="card"><div class="card-icon">📈</div><h3>Рынок растёт</h3><p>Бот продаёт с прибылью и ставит новые покупки. Цикл продолжается.</p></div>
+      <div class="card"><div class="card-icon">⏳</div><h3>Терпение</h3><p>Стратегия работает на дистанции. Не паникуй при просадках и не меняй настройки каждый час.</p></div>
+      <div class="card"><div class="card-icon">🔒</div><h3>Безопасность ключей</h3><p>Никогда не публикуй .env и не включай право Withdraw на API-ключе.</p></div>
+    </div>
+
+    <div class="alert warning">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-content">
+        <div class="alert-title">Важное предупреждение</div>
+        <div class="alert-text">
+          Торговля криптовалютой связана с риском. Используй только те средства, которыми готов рискнуть. Прошлые результаты не гарантируют будущую прибыль.
+          Храни API-ключи в безопасности — никто, кроме тебя, не должен иметь к ним доступ.
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="container">
+    <div class="footer-text">Все права защищены © Geniy Kripty</div>
+    <div class="footer-text" style="margin-top: 16px;">Made with 💚 for traders</div>
+    <div class="footer-text footer-warn">Coin Steps v1.0.02</div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+<!-- SCROLL TOP -->
+<button type="button" id="toTopBtn" class="to-top" aria-label="Наверх">
+  <svg class="tt-ring" viewBox="0 0 54 54" aria-hidden="true"><circle class="tt-bg" cx="27" cy="27" r="25"/><circle class="tt-fg" id="toTopRing" cx="27" cy="27" r="25"/></svg>
+  <svg class="tt-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+<script>
+// Кнопка «Наверх»: показывается после прокрутки на SHOW_AFTER пикселей; кольцо вокруг неё — прогресс прокрутки страницы.
+(function () {
+  const btn = document.getElementById("toTopBtn"), ring = document.getElementById("toTopRing");
+  if (!btn || !ring) return;
+  const SHOW_AFTER = 400, CIRC = 2 * Math.PI * 25;
+  ring.style.strokeDasharray = CIRC;
+  let ticking = false;
+  function update() {
+    ticking = false;
+    const doc = document.documentElement, y = window.pageYOffset || doc.scrollTop || 0;
+    const max = Math.max(doc.scrollHeight - window.innerHeight, 1);
+    btn.classList.toggle("show", y > SHOW_AFTER);
+    ring.style.strokeDashoffset = CIRC * (1 - Math.min(y / max, 1));
+  }
+  window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener("resize", update);
+  btn.addEventListener("click", () => {
+    const calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
+    btn.blur();
+  });
+  update();
+})();
+</script>
+</body>
+</html>
